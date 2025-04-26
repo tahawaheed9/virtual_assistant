@@ -8,7 +8,7 @@ class AppTextStrings {
   static const String homeViewTitle = 'Voice Assistant';
 
   static const String homeViewGreetingText =
-      'Greetings! what task can I do you?';
+      'Greetings! what task can I do for you?';
 
   static const String featureText = 'Here are a few features.';
 

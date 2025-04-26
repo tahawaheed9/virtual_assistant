@@ -24,35 +24,41 @@ class _HomeViewState extends State<HomeView> {
         leading: const Icon(Icons.menu_outlined),
         title: AppTextStrings.homeViewTitle,
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(AppSizes.kDefaultPadding),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              AssistantAvatar(),
-              GreetingText(),
-              FeaturesText(),
-              Column(
-                children: <Widget>[
-                  FeatureBox(
-                    color: AppTheme.firstSuggestionBoxColor,
-                    featureTitle: AppTextStrings.firstFeatureTitle,
-                    featureDescription: AppTextStrings.firstFeatureDescription,
-                  ),
-                  FeatureBox(
-                    color: AppTheme.secondSuggestionBoxColor,
-                    featureTitle: AppTextStrings.secondFeatureTitle,
-                    featureDescription: AppTextStrings.secondFeatureDescription,
-                  ),
-                  FeatureBox(
-                    color: AppTheme.thirdSuggestionBoxColor,
-                    featureTitle: AppTextStrings.thirdFeatureTitle,
-                    featureDescription: AppTextStrings.thirdFeatureDescription,
-                  ),
-                ],
-              ),
-            ],
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: AppSizes.kMaxWidth),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                AssistantAvatar(),
+                GreetingText(),
+                FeaturesText(),
+                Column(
+                  children: <Widget>[
+                    FeatureBox(
+                      color: AppTheme.firstSuggestionBoxColor,
+                      featureTitle: AppTextStrings.firstFeatureTitle,
+                      featureDescription:
+                          AppTextStrings.firstFeatureDescription,
+                    ),
+                    FeatureBox(
+                      color: AppTheme.secondSuggestionBoxColor,
+                      featureTitle: AppTextStrings.secondFeatureTitle,
+                      featureDescription:
+                          AppTextStrings.secondFeatureDescription,
+                    ),
+                    FeatureBox(
+                      color: AppTheme.thirdSuggestionBoxColor,
+                      featureTitle: AppTextStrings.thirdFeatureTitle,
+                      featureDescription:
+                          AppTextStrings.thirdFeatureDescription,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

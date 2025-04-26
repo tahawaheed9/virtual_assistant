@@ -17,6 +17,9 @@ class AppSizes {
   static const double kFeatureTextFontSize = 20.0;
   static const double kFeatureBoxTitleFontSize = 18.0;
 
+  // ConstrainedBox Sizes...
+  static const double kMaxWidth = 400.0;
+
   // Container Sizes...
   static const double kFeatureBoxRadius = 15.0;
   static const double kGreetingContainerRadius = 20.0;
