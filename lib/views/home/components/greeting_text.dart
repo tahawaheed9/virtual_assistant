@@ -11,12 +11,12 @@ class GreetingText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
-        vertical: AppSizes.kDefaultContainerVerticalPadding,
-        horizontal: AppSizes.kDefaultContainerHorizontalPadding,
+        vertical: AppSizes.kPadding10,
+        horizontal: AppSizes.kPadding20,
       ),
       margin: const EdgeInsets.symmetric(
-        horizontal: AppSizes.kDefaultContainerHorizontalMargin,
-      ).copyWith(top: AppSizes.kDefaultContainerTopMargin),
+        horizontal: AppSizes.kPadding40,
+      ).copyWith(top: AppSizes.kPadding30),
       decoration: BoxDecoration(
         border: Border.all(color: AppTheme.borderColor),
         borderRadius: BorderRadius.circular(
@@ -24,9 +24,7 @@ class GreetingText extends StatelessWidget {
         ).copyWith(topLeft: Radius.zero),
       ),
       child: const Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: AppSizes.kDefaultContainerVerticalPadding,
-        ),
+        padding: EdgeInsets.symmetric(vertical: AppSizes.kPadding10),
         child: Text(
           AppTextStrings.homeViewGreetingText,
           style: TextStyle(
