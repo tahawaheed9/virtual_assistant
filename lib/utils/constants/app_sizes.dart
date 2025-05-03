@@ -26,6 +26,8 @@ class AppSizes {
 
   // SizedBoxes heights & widths...
   static const double kSizedBoxHeight3 = 3.0;
+  static const double kSpaceBetweenItems = 10.0;
+  static const double kSpaceBetweenSections = 30.0;
 
   // Snackbar Sizes...
   static const double kSnackBarBorderRadius = 12.0;

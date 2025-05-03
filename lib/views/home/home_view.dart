@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 
-import 'package:voice_assistant/utils/constants/app_enums.dart';
 import 'package:voice_assistant/utils/constants/app_sizes.dart';
 import 'package:voice_assistant/utils/constants/text_strings.dart';
-import 'package:voice_assistant/utils/helpers/helper_functions.dart';
 import 'package:voice_assistant/views/components/feature_box.dart';
 import 'package:voice_assistant/utils/constants/theme/app_theme.dart';
 import 'package:voice_assistant/views/components/custom_app_bar.dart';
@@ -23,18 +21,13 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final SpeechToText _speechToText = SpeechToText();
 
+  bool _isEnabled = false;
   String _lastWords = '';
 
   @override
   void initState() {
     super.initState();
     initSpeechToText();
-  }
-
-  @override
-  void dispose() {
-    _speechToText.stop();
-    super.dispose();
   }
 
   @override
@@ -77,54 +70,45 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ],
                 ),
-                Visibility(
-                  visible: _lastWords.isNotEmpty,
-                  child: Text(
-                    _lastWords,
-                    softWrap: true,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
+                Text(
+                  _lastWords,
+                  softWrap: true,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
+                const SizedBox(height: AppSizes.kSpaceBetweenSections),
               ],
             ),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
+        onPressed:
+            _speechToText.isNotListening ? startListening : stopListening,
         backgroundColor: AppTheme.mainFontColor,
-        icon: Icon(
+        child: Icon(
           color: Colors.white,
           _speechToText.isListening
               ? Icons.stop_circle_outlined
               : Icons.mic_outlined,
         ),
-        label: Text(
-          'Tap to speak...',
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(color: Colors.white),
-        ),
-        onPressed: onButtonPressed,
       ),
     );
   }
 
-  Future<void> initSpeechToText() async {
-    await _speechToText.initialize();
-    setState(() {});
-    HelperFunctions.showSnackbar(
-      context: context,
-      type: SnackBarType.success,
-      message: 'Tap the microphone and speak...',
+  void initSpeechToText() async {
+    _isEnabled = await _speechToText.initialize(
+      onStatus: (status) => debugPrint('Status: $status'),
+      onError: (error) => debugPrint('Error: $error'),
     );
-  }
-
-  Future<void> startListening() async {
-    await _speechToText.listen(onResult: onSpeechResult);
     setState(() {});
   }
 
-  Future<void> stopListening() async {
+  void startListening() async {
+    await _speechToText.listen(localeId: 'en_US', onResult: onSpeechResult);
+    setState(() {});
+  }
+
+  void stopListening() async {
     await _speechToText.stop();
     setState(() {});
   }
@@ -132,21 +116,7 @@ class _HomeViewState extends State<HomeView> {
   void onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       _lastWords = result.recognizedWords;
+      debugPrint('Recognized Words: $_lastWords');
     });
-  }
-
-  Future<void> onButtonPressed() async {
-    final hasPermission = await _speechToText.hasPermission;
-
-    if (!hasPermission) {
-      await initSpeechToText();
-      return;
-    }
-
-    if (_speechToText.isListening) {
-      await stopListening();
-    } else {
-      await startListening();
-    }
   }
 }
