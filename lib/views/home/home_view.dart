@@ -134,6 +134,10 @@ class _HomeViewState extends State<HomeView> {
       await startListening();
     } else if (_speechToText.isListening) {
       await stopListening();
+      setState(() {
+        generatedContext = _lastWords;
+        generatedImageURL = null;
+      });
       await _openAI.checkAIModel(_lastWords);
     } else {
       await initSpeechToText();
