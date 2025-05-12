@@ -48,10 +48,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        leading: const Icon(Icons.menu_outlined),
-        title: AppTextStrings.homeViewTitle,
-      ),
+      appBar: CustomAppBar(title: AppTextStrings.homeViewTitle),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(AppSizes.kDefaultPadding),
         child: Center(
