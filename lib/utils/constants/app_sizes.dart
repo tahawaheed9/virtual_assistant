@@ -14,6 +14,7 @@ class AppSizes {
 
   // Font Sizes...
   static const double kGreetingFontSize = 25.0;
+  static const double kAIResponseFontSize = 18.0;
   static const double kFeatureTextFontSize = 20.0;
   static const double kFeatureBoxTitleFontSize = 18.0;
 
@@ -34,4 +35,7 @@ class AppSizes {
   static const double kSnackBarContentPadding = 8.0;
   static const double kSnackBarLeadingIconSize = 42.0;
   static const double kSnackBarSpaceBetweenItems = 10.0;
+
+  // Response Image Radius...
+  static const double kResponseImageRadius = 20.0;
 }

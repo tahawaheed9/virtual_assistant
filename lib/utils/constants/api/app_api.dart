@@ -1,0 +1,3 @@
+class AppApi {
+  AppApi._();
+}
