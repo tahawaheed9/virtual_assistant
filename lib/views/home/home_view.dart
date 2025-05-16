@@ -124,10 +124,8 @@ class _HomeViewState extends State<HomeView> {
     } else if (_speechToText.isListening) {
       final response = await _aiServices.getAIModelResponse(_lastWords);
       if (response.isNotEmpty) {
-        setState(() {
-          generatedContent = response;
-          generatedImageURL = null;
-        });
+        generatedContent = response;
+        generatedImageURL = null;
       }
       await stopListening();
     } else {
