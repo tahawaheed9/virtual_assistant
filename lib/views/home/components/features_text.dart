@@ -29,7 +29,7 @@ class FeaturesText extends StatelessWidget {
             left: AppSizes.kPadding20,
           ),
           child: const Text(
-            AppTextStrings.featureText,
+            AppTextStrings.featureHeading,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: AppTheme.mainFontColor,

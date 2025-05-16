@@ -10,18 +10,15 @@ class AppTextStrings {
   static const String homeViewGreetingText =
       'Greetings! what task can I do for you?';
 
-  static const String featureText = 'Here are a few features.';
+  static const String featureHeading = 'Here are a few features.';
 
   // Feature Box Suggestions Title...
-  static const String firstFeatureTitle = 'ChatGPT';
-  static const String secondFeatureTitle = 'Dall-E';
-  static const String thirdFeatureTitle = 'Smart Voice Assistant';
+  static const String firstFeatureTitle = 'Gemini';
+  static const String secondFeatureTitle = 'Smart Voice Assistant';
 
-  // Feature Box Suggestions Description...
+  // Feature Description...
   static const String firstFeatureDescription =
-      'A smarter way to stay organized and informed with ChatGPT';
+      'A smarter way to stay organized and informed with $firstFeatureTitle.';
   static const String secondFeatureDescription =
-      'Get inspired and stay creative with your personal assistant powered by Dall-E';
-  static const String thirdFeatureDescription =
-      'Get the best of both worlds with a voice assistant powered by ChatGPT and Dall-E';
+      'Talk to your assistant naturally and get intelligent, real-time responses powered by $firstFeatureTitle AI. Whether you need quick answers, task help, or just a friendly chat, our assistant is here to help.';
 }

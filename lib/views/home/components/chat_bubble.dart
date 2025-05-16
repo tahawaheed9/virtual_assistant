@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'package:voice_assistant/utils/constants/app_sizes.dart';
 import 'package:voice_assistant/utils/constants/text_strings.dart';
@@ -37,19 +38,28 @@ class ChatBubble extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: AppSizes.kPadding10),
           child:
               generatedImageURL == null
-                  ? Text(
-                    generatedContext == null
-                        ? AppTextStrings.homeViewGreetingText
-                        : generatedContext!,
-                    style: TextStyle(
-                      color: AppTheme.mainFontColor,
-                      fontSize:
-                          generatedContext == null
-                              ? AppSizes.kGreetingFontSize
-                              : AppSizes.kAIResponseFontSize,
-                      fontFamily: AppTheme.kDefaultFontFamily,
-                    ),
-                  )
+                  ? generatedContext != null
+                      ? MarkdownBody(
+                        data: generatedContext!,
+                        styleSheet: MarkdownStyleSheet.fromTheme(
+                          Theme.of(context),
+                        ).copyWith(
+                          p: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontFamily: AppTheme.kDefaultFontFamily,
+                          ),
+                        ),
+                      )
+                      : Text(
+                        AppTextStrings.homeViewGreetingText,
+                        style: TextStyle(
+                          color: AppTheme.mainFontColor,
+                          fontSize:
+                              generatedContext == null
+                                  ? AppSizes.kGreetingFontSize
+                                  : AppSizes.kAIResponseFontSize,
+                          fontFamily: AppTheme.kDefaultFontFamily,
+                        ),
+                      )
                   : ClipRRect(
                     borderRadius: BorderRadius.circular(
                       AppSizes.kResponseImageRadius,

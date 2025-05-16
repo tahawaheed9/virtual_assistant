@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:animate_do/animate_do.dart';
 
+import 'package:voice_assistant/utils/constants/theme/app_theme.dart';
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
   final String title;
@@ -21,7 +23,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: leading,
-      title: BounceInDown(child: Text(title)),
+      title: BounceInDown(
+        child: Text(
+          title,
+          style: const TextStyle(fontFamily: AppTheme.kDefaultFontFamily),
+        ),
+      ),
       centerTitle: true,
       actions: actions,
     );

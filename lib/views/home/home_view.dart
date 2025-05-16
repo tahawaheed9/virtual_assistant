@@ -1,6 +1,6 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 
@@ -23,7 +23,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final SpeechToText _speechToText = SpeechToText();
-  final AIServices _openAI = AIServices();
+  final AIServices _aiServices = AIServices();
 
   String _lastWords = '';
 
@@ -91,17 +91,6 @@ class _HomeViewState extends State<HomeView> {
                               AppTextStrings.secondFeatureDescription,
                         ),
                       ),
-                      SlideInLeft(
-                        delay: Duration(
-                          milliseconds: animationStart + (2 * animationDelay),
-                        ),
-                        child: const FeatureBox(
-                          color: AppTheme.thirdSuggestionBoxColor,
-                          featureTitle: AppTextStrings.thirdFeatureTitle,
-                          featureDescription:
-                              AppTextStrings.thirdFeatureDescription,
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -134,11 +123,12 @@ class _HomeViewState extends State<HomeView> {
       await startListening();
     } else if (_speechToText.isListening) {
       await stopListening();
+      final response = await _aiServices.getAIModelResponse(_lastWords);
       setState(() {
-        generatedContext = _lastWords;
+        generatedContext = response;
         generatedImageURL = null;
       });
-      await _openAI.checkAIModel(_lastWords);
+      debugPrint(response);
     } else {
       await initSpeechToText();
     }
