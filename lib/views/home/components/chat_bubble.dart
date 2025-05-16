@@ -8,12 +8,12 @@ import 'package:voice_assistant/utils/constants/text_strings.dart';
 import 'package:voice_assistant/utils/constants/theme/app_theme.dart';
 
 class ChatBubble extends StatelessWidget {
-  final String? generatedContext;
+  final String? generatedContent;
   final String? generatedImageURL;
 
   const ChatBubble({
     super.key,
-    required this.generatedContext,
+    required this.generatedContent,
     required this.generatedImageURL,
   });
 
@@ -38,9 +38,9 @@ class ChatBubble extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: AppSizes.kPadding10),
           child:
               generatedImageURL == null
-                  ? generatedContext != null
+                  ? generatedContent != null
                       ? MarkdownBody(
-                        data: generatedContext!,
+                        data: generatedContent!,
                         styleSheet: MarkdownStyleSheet.fromTheme(
                           Theme.of(context),
                         ).copyWith(
@@ -54,7 +54,7 @@ class ChatBubble extends StatelessWidget {
                         style: TextStyle(
                           color: AppTheme.mainFontColor,
                           fontSize:
-                              generatedContext == null
+                              generatedContent == null
                                   ? AppSizes.kGreetingFontSize
                                   : AppSizes.kAIResponseFontSize,
                           fontFamily: AppTheme.kDefaultFontFamily,

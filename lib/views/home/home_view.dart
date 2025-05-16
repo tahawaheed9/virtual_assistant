@@ -27,7 +27,7 @@ class _HomeViewState extends State<HomeView> {
 
   String _lastWords = '';
 
-  String? generatedContext;
+  String? generatedContent;
   String? generatedImageURL;
 
   final int animationStart = 200;
@@ -59,16 +59,16 @@ class _HomeViewState extends State<HomeView> {
               children: <Widget>[
                 const AssistantAvatar(),
                 ChatBubble(
-                  generatedContext: generatedContext,
+                  generatedContent: generatedContent,
                   generatedImageURL: generatedImageURL,
                 ),
                 FeaturesText(
-                  generatedContext: generatedContext,
+                  generatedContent: generatedContent,
                   generatedImageURL: generatedImageURL,
                 ),
                 Visibility(
                   visible:
-                      generatedContext == null && generatedImageURL == null,
+                      generatedContent == null && generatedImageURL == null,
                   child: Column(
                     children: <Widget>[
                       SlideInLeft(
@@ -122,13 +122,14 @@ class _HomeViewState extends State<HomeView> {
     if (await _speechToText.hasPermission && _speechToText.isNotListening) {
       await startListening();
     } else if (_speechToText.isListening) {
-      await stopListening();
       final response = await _aiServices.getAIModelResponse(_lastWords);
-      setState(() {
-        generatedContext = response;
-        generatedImageURL = null;
-      });
-      debugPrint(response);
+      if (response.isNotEmpty) {
+        setState(() {
+          generatedContent = response;
+          generatedImageURL = null;
+        });
+      }
+      await stopListening();
     } else {
       await initSpeechToText();
     }

@@ -7,12 +7,12 @@ import 'package:voice_assistant/utils/constants/text_strings.dart';
 import 'package:voice_assistant/utils/constants/theme/app_theme.dart';
 
 class FeaturesText extends StatelessWidget {
-  final String? generatedContext;
+  final String? generatedContent;
   final String? generatedImageURL;
 
   const FeaturesText({
     super.key,
-    required this.generatedContext,
+    required this.generatedContent,
     this.generatedImageURL,
   });
 
@@ -20,7 +20,7 @@ class FeaturesText extends StatelessWidget {
   Widget build(BuildContext context) {
     return SlideInLeft(
       child: Visibility(
-        visible: generatedContext == null && generatedImageURL == null,
+        visible: generatedContent == null && generatedImageURL == null,
         child: Container(
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.all(AppSizes.kPadding10),
