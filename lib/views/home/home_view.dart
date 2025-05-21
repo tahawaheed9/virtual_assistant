@@ -31,7 +31,7 @@ class _HomeViewState extends State<HomeView> {
 
   bool _isChatEnabled = true;
 
-  late final TextEditingController _chat;
+  final TextEditingController _chat = TextEditingController();
 
   String _lastWords = '';
 
@@ -45,7 +45,6 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     _initSpeechToText();
-    _chat = TextEditingController();
   }
 
   @override
@@ -135,8 +134,8 @@ class _HomeViewState extends State<HomeView> {
   Future<void> _onSendButtonPressed() async {
     final prompt = _chat.text.trim();
     if (prompt.isNotEmpty) {
-      _chat.clear();
       final response = await _aiServices.getAIModelResponse(prompt);
+      _chat.clear();
       if (response.isNotEmpty) {
         generatedContent = response;
         generatedImageURL = null;
