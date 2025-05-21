@@ -25,8 +25,11 @@ class ChatBubble extends StatelessWidget {
           vertical: AppSizes.kPadding10,
           horizontal: AppSizes.kPadding20,
         ),
-        margin: const EdgeInsets.symmetric(
-          horizontal: AppSizes.kPadding40,
+        margin: EdgeInsets.symmetric(
+          horizontal:
+              generatedContent != null
+                  ? AppSizes.kPadding20
+                  : AppSizes.kPadding40,
         ).copyWith(top: AppSizes.kPadding30),
         decoration: BoxDecoration(
           border: Border.all(color: AppTheme.borderColor),
@@ -56,10 +59,8 @@ class ChatBubble extends StatelessWidget {
                           const SizedBox(height: 10.0),
                           Divider(),
                           const Text(
-                            'Gemini makes mistakes, so double-check it.',
-                            style: TextStyle(
-                              fontStyle: FontStyle.italic,
-                            ),
+                            AppTextStrings.disclaimer,
+                            style: TextStyle(fontStyle: FontStyle.italic),
                           ),
                         ],
                       )

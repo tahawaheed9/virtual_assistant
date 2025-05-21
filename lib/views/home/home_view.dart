@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:animate_do/animate_do.dart';
@@ -5,8 +7,10 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 
 import 'package:voice_assistant/services/ai_services.dart';
+import 'package:voice_assistant/utils/constants/app_enums.dart';
 import 'package:voice_assistant/utils/constants/app_sizes.dart';
 import 'package:voice_assistant/utils/constants/text_strings.dart';
+import 'package:voice_assistant/utils/helpers/helper_functions.dart';
 import 'package:voice_assistant/views/components/feature_box.dart';
 import 'package:voice_assistant/utils/constants/theme/app_theme.dart';
 import 'package:voice_assistant/views/components/custom_app_bar.dart';
@@ -22,8 +26,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final GlobalKey<FormState> _key = GlobalKey<FormState>();
-
   final SpeechToText _speechToText = SpeechToText();
   final AIServices _aiServices = AIServices();
 
@@ -114,8 +116,8 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Future<void> _onSpeechButtonPressed() async {
+    _isChatEnabled = false;
     if (await _speechToText.hasPermission && _speechToText.isNotListening) {
-      _isChatEnabled = false;
       await _startListening();
     } else if (_speechToText.isListening) {
       final response = await _aiServices.getAIModelResponse(_lastWords);
@@ -126,29 +128,50 @@ class _HomeViewState extends State<HomeView> {
       _isChatEnabled = true;
       await _stopListening();
     } else {
-      _isChatEnabled = true;
       await _initSpeechToText();
     }
   }
 
   Future<void> _onSendButtonPressed() async {
-    if (_key.currentState!.validate()) {
-      final prompt = _chat.text.trim();
+    final prompt = _chat.text.trim();
+    if (prompt.isNotEmpty) {
+      _chat.clear();
       final response = await _aiServices.getAIModelResponse(prompt);
       if (response.isNotEmpty) {
         generatedContent = response;
         generatedImageURL = null;
+        setState(() {});
       }
-      setState(() {});
-      _chat.clear();
+    } else {
+      HelperFunctions.showSnackbar(
+        context: context,
+        type: SnackBarType.warning,
+        message: AppTextStrings.onEmptyField,
+      );
     }
   }
 
   Future<void> _initSpeechToText() async {
-    await _speechToText.initialize(
-      onStatus: (status) => debugPrint('Status: $status'),
-      onError: (error) => debugPrint('Error: $error'),
-    );
+    await _speechToText
+        .initialize(
+          onStatus: (status) => debugPrint('Status: $status'),
+          onError: (error) => debugPrint('Error: $error'),
+        )
+        .then(<bool>(value) {
+          if (value) {
+            HelperFunctions.showSnackbar(
+              context: context,
+              type: SnackBarType.success,
+              message: AppTextStrings.onSpeechAvailable,
+            );
+          } else {
+            HelperFunctions.showSnackbar(
+              context: context,
+              type: SnackBarType.error,
+              message: AppTextStrings.onError,
+            );
+          }
+        });
     setState(() {});
   }
 
@@ -165,7 +188,6 @@ class _HomeViewState extends State<HomeView> {
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       _lastWords = result.recognizedWords;
-      debugPrint('Recognized Words: $_lastWords');
     });
   }
 
@@ -192,7 +214,6 @@ class _HomeViewState extends State<HomeView> {
                   milliseconds: animationStart + (2 * animationDelay),
                 ),
                 child: Form(
-                  key: _key,
                   child: TextFormField(
                     controller: _chat,
                     maxLines: null,
@@ -200,19 +221,21 @@ class _HomeViewState extends State<HomeView> {
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.send,
                     decoration: InputDecoration(
-                      hintText: 'Type your prompt...',
+                      hintText: AppTextStrings.textFieldHint,
                       focusedBorder: textFieldBorder,
                       border: textFieldBorder,
                       prefixIcon: const Icon(
                         Icons.chat_outlined,
                         color: AppTheme.mainFontColor,
                       ),
-                      suffixIcon: IconButton(
-                        tooltip: 'Send',
-                        onPressed: () => _onSendButtonPressed(),
-                        icon: const Icon(
-                          color: AppTheme.mainFontColor,
-                          Icons.send_outlined,
+                      suffixIcon: GestureDetector(
+                        onTap: () async => _onSendButtonPressed(),
+                        child: const Tooltip(
+                          message: AppTextStrings.sendButtonText,
+                          child: Icon(
+                            color: AppTheme.mainFontColor,
+                            Icons.send_outlined,
+                          ),
                         ),
                       ),
                     ),
@@ -230,11 +253,7 @@ class _HomeViewState extends State<HomeView> {
                   backgroundColor: AppTheme.mainFontColor,
                 ),
                 constraints: BoxConstraints(minHeight: 50, minWidth: 50),
-                onPressed: () async {
-                  if (!_isChatEnabled) {
-                    await _onSpeechButtonPressed();
-                  }
-                },
+                onPressed: () async => _onSpeechButtonPressed(),
                 icon: Icon(
                   color: Colors.white,
                   _speechToText.isListening

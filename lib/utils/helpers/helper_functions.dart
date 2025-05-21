@@ -27,7 +27,7 @@ class HelperFunctions {
           borderRadius: BorderRadius.circular(AppSizes.kSnackBarBorderRadius),
         ),
         content: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Icon(
               color: Colors.white,
@@ -36,7 +36,6 @@ class HelperFunctions {
                   : type == SnackBarType.warning
                   ? Icons.warning_amber_rounded
                   : Icons.error_outline,
-              size: AppSizes.kSnackBarLeadingIconSize,
             ),
             const SizedBox(width: AppSizes.kSnackBarSpaceBetweenItems),
             Flexible(

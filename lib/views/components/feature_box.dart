@@ -55,7 +55,7 @@ class _FeatureBoxState extends State<FeatureBox> {
 
     tp.layout(
       maxWidth:
-          MediaQuery.of(context).size.width - AppSizes.kPadding35 * 2 - 48,
+          MediaQuery.of(context).size.width - AppSizes.kPadding35 * 3 - 48,
     ); // Adjust for padding and icon
     return tp.didExceedMaxLines;
   }

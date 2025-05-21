@@ -32,7 +32,7 @@ class AppSizes {
 
   // Snackbar Sizes...
   static const double kSnackBarBorderRadius = 12.0;
-  static const double kSnackBarContentPadding = 8.0;
+  static const double kSnackBarContentPadding = 16.0;
   static const double kSnackBarLeadingIconSize = 42.0;
   static const double kSnackBarSpaceBetweenItems = 10.0;
 
