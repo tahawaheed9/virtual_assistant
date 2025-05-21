@@ -22,8 +22,14 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
   final SpeechToText _speechToText = SpeechToText();
   final AIServices _aiServices = AIServices();
+
+  bool _isChatEnabled = true;
+
+  late final TextEditingController _chat;
 
   String _lastWords = '';
 
@@ -36,17 +42,20 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    initSpeechToText();
+    _initSpeechToText();
+    _chat = TextEditingController();
   }
 
   @override
   void dispose() {
     _speechToText.stop();
+    _chat.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final double keyboardInsets = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
       appBar: CustomAppBar(title: AppTextStrings.homeViewTitle),
       body: SingleChildScrollView(
@@ -94,46 +103,48 @@ class _HomeViewState extends State<HomeView> {
                     ],
                   ),
                 ),
-                const SizedBox(height: AppSizes.kSpaceBetweenSections),
               ],
             ),
           ),
         ),
       ),
-      floatingActionButton: ZoomIn(
-        delay: Duration(milliseconds: animationStart + (2 * animationDelay)),
-        child: FloatingActionButton(
-          onPressed: () async {
-            await onSpeechButtonPressed();
-          },
-          backgroundColor: AppTheme.mainFontColor,
-          child: Icon(
-            color: Colors.white,
-            _speechToText.isListening
-                ? Icons.stop_circle_outlined
-                : Icons.mic_outlined,
-          ),
-        ),
-      ),
+      resizeToAvoidBottomInset: true,
+      bottomNavigationBar: _buildBottomWidget(keyboardInsets),
     );
   }
 
-  Future<void> onSpeechButtonPressed() async {
+  Future<void> _onSpeechButtonPressed() async {
     if (await _speechToText.hasPermission && _speechToText.isNotListening) {
-      await startListening();
+      _isChatEnabled = false;
+      await _startListening();
     } else if (_speechToText.isListening) {
       final response = await _aiServices.getAIModelResponse(_lastWords);
       if (response.isNotEmpty) {
         generatedContent = response;
         generatedImageURL = null;
       }
-      await stopListening();
+      _isChatEnabled = true;
+      await _stopListening();
     } else {
-      await initSpeechToText();
+      _isChatEnabled = true;
+      await _initSpeechToText();
     }
   }
 
-  Future<void> initSpeechToText() async {
+  Future<void> _onSendButtonPressed() async {
+    if (_key.currentState!.validate()) {
+      final prompt = _chat.text.trim();
+      final response = await _aiServices.getAIModelResponse(prompt);
+      if (response.isNotEmpty) {
+        generatedContent = response;
+        generatedImageURL = null;
+      }
+      setState(() {});
+      _chat.clear();
+    }
+  }
+
+  Future<void> _initSpeechToText() async {
     await _speechToText.initialize(
       onStatus: (status) => debugPrint('Status: $status'),
       onError: (error) => debugPrint('Error: $error'),
@@ -141,20 +152,100 @@ class _HomeViewState extends State<HomeView> {
     setState(() {});
   }
 
-  Future<void> startListening() async {
-    await _speechToText.listen(localeId: 'en_US', onResult: onSpeechResult);
+  Future<void> _startListening() async {
+    await _speechToText.listen(localeId: 'en_US', onResult: _onSpeechResult);
     setState(() {});
   }
 
-  Future<void> stopListening() async {
+  Future<void> _stopListening() async {
     await _speechToText.stop();
     setState(() {});
   }
 
-  void onSpeechResult(SpeechRecognitionResult result) {
+  void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       _lastWords = result.recognizedWords;
       debugPrint('Recognized Words: $_lastWords');
     });
+  }
+
+  SafeArea _buildBottomWidget(double keyboardInsets) {
+    final textFieldBorder = OutlineInputBorder(
+      borderSide: BorderSide(width: 2, color: AppTheme.mainFontColor),
+    );
+    return SafeArea(
+      top: false,
+      bottom: true,
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: AppSizes.kDefaultPadding,
+          left: AppSizes.kDefaultPadding,
+          right: AppSizes.kDefaultPadding,
+          bottom: AppSizes.kDefaultPadding + keyboardInsets,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              child: SlideInLeft(
+                delay: Duration(
+                  milliseconds: animationStart + (2 * animationDelay),
+                ),
+                child: Form(
+                  key: _key,
+                  child: TextFormField(
+                    controller: _chat,
+                    maxLines: null,
+                    enabled: _isChatEnabled,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.send,
+                    decoration: InputDecoration(
+                      hintText: 'Type your prompt...',
+                      focusedBorder: textFieldBorder,
+                      border: textFieldBorder,
+                      prefixIcon: const Icon(
+                        Icons.chat_outlined,
+                        color: AppTheme.mainFontColor,
+                      ),
+                      suffixIcon: IconButton(
+                        tooltip: 'Send',
+                        onPressed: () => _onSendButtonPressed(),
+                        icon: const Icon(
+                          color: AppTheme.mainFontColor,
+                          Icons.send_outlined,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 10.0),
+            SlideInRight(
+              delay: Duration(
+                milliseconds: animationStart + (2 * animationDelay),
+              ),
+              child: IconButton.filled(
+                style: IconButton.styleFrom(
+                  backgroundColor: AppTheme.mainFontColor,
+                ),
+                constraints: BoxConstraints(minHeight: 50, minWidth: 50),
+                onPressed: () async {
+                  if (!_isChatEnabled) {
+                    await _onSpeechButtonPressed();
+                  }
+                },
+                icon: Icon(
+                  color: Colors.white,
+                  _speechToText.isListening
+                      ? Icons.stop_circle_outlined
+                      : Icons.mic_outlined,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

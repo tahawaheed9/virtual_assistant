@@ -39,15 +39,29 @@ class ChatBubble extends StatelessWidget {
           child:
               generatedImageURL == null
                   ? generatedContent != null
-                      ? MarkdownBody(
-                        data: generatedContent!,
-                        styleSheet: MarkdownStyleSheet.fromTheme(
-                          Theme.of(context),
-                        ).copyWith(
-                          p: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontFamily: AppTheme.kDefaultFontFamily,
+                      ? Column(
+                        children: <Widget>[
+                          MarkdownBody(
+                            data: generatedContent!,
+                            styleSheet: MarkdownStyleSheet.fromTheme(
+                              Theme.of(context),
+                            ).copyWith(
+                              p: Theme.of(
+                                context,
+                              ).textTheme.bodyLarge?.copyWith(
+                                fontFamily: AppTheme.kDefaultFontFamily,
+                              ),
+                            ),
                           ),
-                        ),
+                          const SizedBox(height: 10.0),
+                          Divider(),
+                          const Text(
+                            'Gemini makes mistakes, so double-check it.',
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
                       )
                       : Text(
                         AppTextStrings.homeViewGreetingText,

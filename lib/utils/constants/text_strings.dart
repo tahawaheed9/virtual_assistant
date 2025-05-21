@@ -2,10 +2,10 @@ class AppTextStrings {
   AppTextStrings._();
 
   // App Title...
-  static const String appTitle = 'Voice Assistant';
+  static const String appTitle = 'Virtual Assistant';
 
   // Appbar Titles...
-  static const String homeViewTitle = 'Voice Assistant';
+  static const String homeViewTitle = 'Virtual Assistant';
 
   static const String homeViewGreetingText =
       'Greetings! what task can I do for you?';

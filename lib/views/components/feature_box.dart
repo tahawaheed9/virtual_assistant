@@ -49,7 +49,7 @@ class _FeatureBoxState extends State<FeatureBox> {
 
     final tp = TextPainter(
       text: span,
-      maxLines: 2,
+      maxLines: 3,
       textDirection: TextDirection.ltr,
     );
 
@@ -92,7 +92,7 @@ class _FeatureBoxState extends State<FeatureBox> {
                 Text(
                   widget.featureDescription,
                   key: _textKey,
-                  maxLines: _isExpanded ? null : 2,
+                  maxLines: _isExpanded ? null : 3,
                   overflow:
                       _isExpanded
                           ? TextOverflow.visible

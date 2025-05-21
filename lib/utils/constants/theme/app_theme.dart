@@ -18,9 +18,17 @@ class AppTheme {
   static const Color blackColor = Colors.black;
   static const Color whiteColor = Colors.white;
 
+  static const TextSelectionThemeData textSelectionThemeData =
+      TextSelectionThemeData(
+        cursorColor: mainFontColor,
+        selectionColor: Color.fromRGBO(19, 61, 95, 0.3),
+        selectionHandleColor: mainFontColor,
+      );
+
   static ThemeData lightThemeData({required bool useMaterial3}) =>
       ThemeData.light(useMaterial3: useMaterial3).copyWith(
         scaffoldBackgroundColor: whiteColor,
         appBarTheme: const AppBarTheme(backgroundColor: whiteColor),
+        textSelectionTheme: textSelectionThemeData,
       );
 }

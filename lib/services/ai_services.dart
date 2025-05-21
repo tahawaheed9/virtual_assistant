@@ -25,7 +25,7 @@ class AIServices {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'contents': contents}),
       );
-      debugPrint(response.body);
+      // debugPrint(response.body);
       if (response.statusCode == 200) {
         textResponse =
             jsonDecode(
