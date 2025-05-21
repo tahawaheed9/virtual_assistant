@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-import 'package:voice_assistant/utils/constants/app_sizes.dart';
-import 'package:voice_assistant/utils/constants/text_strings.dart';
-import 'package:voice_assistant/utils/constants/theme/app_theme.dart';
+import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
+import 'package:virtual_assistant/utils/constants/theme/text_strings.dart';
 
 class ChatBubble extends StatelessWidget {
   final String? generatedContent;
@@ -28,11 +27,13 @@ class ChatBubble extends StatelessWidget {
         margin: EdgeInsets.symmetric(
           horizontal:
               generatedContent != null
-                  ? AppSizes.kPadding20
+                  ? AppSizes.kPadding10
                   : AppSizes.kPadding40,
         ).copyWith(top: AppSizes.kPadding30),
         decoration: BoxDecoration(
-          border: Border.all(color: AppTheme.borderColor),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.primaryContainer,
+          ),
           borderRadius: BorderRadius.circular(
             AppSizes.kGreetingContainerRadius,
           ).copyWith(topLeft: Radius.zero),
@@ -49,30 +50,22 @@ class ChatBubble extends StatelessWidget {
                             styleSheet: MarkdownStyleSheet.fromTheme(
                               Theme.of(context),
                             ).copyWith(
-                              p: Theme.of(
-                                context,
-                              ).textTheme.bodyLarge?.copyWith(
-                                fontFamily: AppTheme.kDefaultFontFamily,
-                              ),
+                              p: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
                           const SizedBox(height: 10.0),
                           Divider(),
-                          const Text(
-                            AppTextStrings.disclaimer,
-                            style: TextStyle(fontStyle: FontStyle.italic),
-                          ),
+                          const SizedBox(height: 10.0),
+                          const Text(AppTextStrings.disclaimer),
                         ],
                       )
                       : Text(
                         AppTextStrings.homeViewGreetingText,
                         style: TextStyle(
-                          color: AppTheme.mainFontColor,
                           fontSize:
                               generatedContent == null
                                   ? AppSizes.kGreetingFontSize
                                   : AppSizes.kAIResponseFontSize,
-                          fontFamily: AppTheme.kDefaultFontFamily,
                         ),
                       )
                   : ClipRRect(

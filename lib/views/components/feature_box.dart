@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:voice_assistant/utils/constants/app_sizes.dart';
-import 'package:voice_assistant/utils/constants/theme/app_theme.dart';
+import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
 
 class FeatureBox extends StatefulWidget {
   final Color color;
@@ -49,13 +48,13 @@ class _FeatureBoxState extends State<FeatureBox> {
 
     final tp = TextPainter(
       text: span,
-      maxLines: 3,
+      maxLines: 2,
       textDirection: TextDirection.ltr,
     );
 
     tp.layout(
       maxWidth:
-          MediaQuery.of(context).size.width - AppSizes.kPadding35 * 3 - 48,
+          MediaQuery.of(context).size.width - AppSizes.kPadding35 * 2 - 48,
     ); // Adjust for padding and icon
     return tp.didExceedMaxLines;
   }
@@ -81,10 +80,8 @@ class _FeatureBoxState extends State<FeatureBox> {
               children: <Widget>[
                 Text(
                   widget.featureTitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.blackColor,
-                    fontFamily: AppTheme.kDefaultFontFamily,
                     fontSize: AppSizes.kFeatureBoxTitleFontSize,
                   ),
                 ),
@@ -92,15 +89,11 @@ class _FeatureBoxState extends State<FeatureBox> {
                 Text(
                   widget.featureDescription,
                   key: _textKey,
-                  maxLines: _isExpanded ? null : 3,
+                  maxLines: _isExpanded ? null : 2,
                   overflow:
                       _isExpanded
                           ? TextOverflow.visible
                           : TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: AppTheme.blackColor,
-                    fontFamily: AppTheme.kDefaultFontFamily,
-                  ),
                 ),
               ],
             ),

@@ -6,17 +6,17 @@ import 'package:animate_do/animate_do.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 
-import 'package:voice_assistant/services/ai_services.dart';
-import 'package:voice_assistant/utils/constants/app_enums.dart';
-import 'package:voice_assistant/utils/constants/app_sizes.dart';
-import 'package:voice_assistant/utils/constants/text_strings.dart';
-import 'package:voice_assistant/utils/helpers/helper_functions.dart';
-import 'package:voice_assistant/views/components/feature_box.dart';
-import 'package:voice_assistant/utils/constants/theme/app_theme.dart';
-import 'package:voice_assistant/views/components/custom_app_bar.dart';
-import 'package:voice_assistant/views/home/components/features_text.dart';
-import 'package:voice_assistant/views/home/components/chat_bubble.dart';
-import 'package:voice_assistant/views/home/components/assistant_avatar.dart';
+import 'package:virtual_assistant/services/ai_services.dart';
+import 'package:virtual_assistant/utils/constants/app_enums.dart';
+import 'package:virtual_assistant/views/components/feature_box.dart';
+import 'package:virtual_assistant/utils/helpers/helper_functions.dart';
+import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
+import 'package:virtual_assistant/views/components/custom_app_bar.dart';
+import 'package:virtual_assistant/views/home/components/app_drawer.dart';
+import 'package:virtual_assistant/views/home/components/chat_bubble.dart';
+import 'package:virtual_assistant/utils/constants/theme/text_strings.dart';
+import 'package:virtual_assistant/views/home/components/features_text.dart';
+import 'package:virtual_assistant/views/home/components/assistant_avatar.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -26,14 +26,13 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final SpeechToText _speechToText = SpeechToText();
   final AIServices _aiServices = AIServices();
 
-  bool _isChatEnabled = true;
-
-  final TextEditingController _chat = TextEditingController();
-
   String _lastWords = '';
+  bool _isChatEnabled = true;
+  late final TextEditingController _chat;
 
   String? generatedContent;
   String? generatedImageURL;
@@ -45,6 +44,7 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     _initSpeechToText();
+    _chat = TextEditingController();
   }
 
   @override
@@ -58,7 +58,20 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     final double keyboardInsets = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
-      appBar: CustomAppBar(title: AppTextStrings.homeViewTitle),
+      key: _scaffoldKey,
+      appBar: CustomAppBar(
+        leading: IconButton(
+          tooltip: 'Open drawer',
+          onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+          icon: Icon(
+            Icons.menu_outlined,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        title: BounceIn(child: const Text(AppTextStrings.homeViewTitle)),
+      ),
+      drawer: AppDrawer(),
+      drawerEnableOpenDragGesture: false,
       body: SingleChildScrollView(
         padding: EdgeInsets.all(AppSizes.kDefaultPadding),
         child: Center(
@@ -83,8 +96,8 @@ class _HomeViewState extends State<HomeView> {
                     children: <Widget>[
                       SlideInLeft(
                         delay: Duration(milliseconds: animationStart),
-                        child: const FeatureBox(
-                          color: AppTheme.firstSuggestionBoxColor,
+                        child: FeatureBox(
+                          color: Theme.of(context).colorScheme.primaryContainer,
                           featureTitle: AppTextStrings.firstFeatureTitle,
                           featureDescription:
                               AppTextStrings.firstFeatureDescription,
@@ -94,8 +107,8 @@ class _HomeViewState extends State<HomeView> {
                         delay: Duration(
                           milliseconds: animationStart + animationDelay,
                         ),
-                        child: const FeatureBox(
-                          color: AppTheme.secondSuggestionBoxColor,
+                        child: FeatureBox(
+                          color: Theme.of(context).colorScheme.inversePrimary,
                           featureTitle: AppTextStrings.secondFeatureTitle,
                           featureDescription:
                               AppTextStrings.secondFeatureDescription,
@@ -192,7 +205,10 @@ class _HomeViewState extends State<HomeView> {
 
   SafeArea _buildBottomWidget(double keyboardInsets) {
     final textFieldBorder = OutlineInputBorder(
-      borderSide: BorderSide(width: 2, color: AppTheme.mainFontColor),
+      borderSide: BorderSide(
+        width: 2,
+        color: Theme.of(context).colorScheme.primary,
+      ),
     );
     return SafeArea(
       top: false,
@@ -212,29 +228,28 @@ class _HomeViewState extends State<HomeView> {
                 delay: Duration(
                   milliseconds: animationStart + (2 * animationDelay),
                 ),
-                child: Form(
-                  child: TextFormField(
-                    controller: _chat,
-                    maxLines: null,
-                    enabled: _isChatEnabled,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.send,
-                    decoration: InputDecoration(
-                      hintText: AppTextStrings.textFieldHint,
-                      focusedBorder: textFieldBorder,
-                      border: textFieldBorder,
-                      prefixIcon: const Icon(
-                        Icons.chat_outlined,
-                        color: AppTheme.mainFontColor,
-                      ),
-                      suffixIcon: GestureDetector(
-                        onTap: () async => _onSendButtonPressed(),
-                        child: const Tooltip(
-                          message: AppTextStrings.sendButtonText,
-                          child: Icon(
-                            color: AppTheme.mainFontColor,
-                            Icons.send_outlined,
-                          ),
+                child: TextFormField(
+                  controller: _chat,
+                  maxLines: null,
+                  enabled: _isChatEnabled,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.send,
+                  decoration: InputDecoration(
+                    hintText: AppTextStrings.textFieldHint,
+                    focusedBorder: textFieldBorder,
+                    border: textFieldBorder,
+                    prefixIcon: Icon(
+                      Icons.chat_outlined,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                    suffixIcon: GestureDetector(
+                      onTap: () async => _onSendButtonPressed(),
+                      child: Tooltip(
+                        message: AppTextStrings.sendButtonText,
+                        child: Icon(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          Icons.send_outlined,
                         ),
                       ),
                     ),
@@ -249,12 +264,13 @@ class _HomeViewState extends State<HomeView> {
               ),
               child: IconButton.filled(
                 style: IconButton.styleFrom(
-                  backgroundColor: AppTheme.mainFontColor,
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primaryContainer,
                 ),
                 constraints: BoxConstraints(minHeight: 50, minWidth: 50),
                 onPressed: () async => _onSpeechButtonPressed(),
                 icon: Icon(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                   _speechToText.isListening
                       ? Icons.stop_circle_outlined
                       : Icons.mic_outlined,

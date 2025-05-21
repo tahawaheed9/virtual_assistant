@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:voice_assistant/utils/constants/app_enums.dart';
-import 'package:voice_assistant/utils/constants/app_sizes.dart';
-import 'package:voice_assistant/utils/constants/theme/app_theme.dart';
+import 'package:virtual_assistant/utils/constants/app_enums.dart';
+import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
 
 class HelperFunctions {
   HelperFunctions._();
@@ -20,14 +19,13 @@ class HelperFunctions {
                 ? Colors.green[800]
                 : type == SnackBarType.warning
                 ? Colors.orange[800]
-                : Colors.red[800],
+                : Theme.of(context).colorScheme.error,
         behavior: SnackBarBehavior.floating,
         padding: const EdgeInsets.all(AppSizes.kSnackBarContentPadding),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSizes.kSnackBarBorderRadius),
         ),
         content: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Icon(
               color: Colors.white,
@@ -39,17 +37,10 @@ class HelperFunctions {
             ),
             const SizedBox(width: AppSizes.kSnackBarSpaceBetweenItems),
             Flexible(
-              child: Text(
-                message,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontFamily: AppTheme.kDefaultFontFamily,
-                ),
-              ),
+              child: Text(message, style: const TextStyle(color: Colors.white)),
             ),
           ],
         ),
-        showCloseIcon: true,
       ),
     );
   }

@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:animate_do/animate_do.dart';
 
-import 'package:voice_assistant/utils/constants/app_sizes.dart';
-import 'package:voice_assistant/utils/constants/text_strings.dart';
-import 'package:voice_assistant/utils/constants/theme/app_theme.dart';
+import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
+import 'package:virtual_assistant/utils/constants/theme/text_strings.dart';
 
 class FeaturesText extends StatelessWidget {
   final String? generatedContent;
@@ -28,13 +27,12 @@ class FeaturesText extends StatelessWidget {
             top: AppSizes.kPadding10,
             left: AppSizes.kPadding20,
           ),
-          child: const Text(
+          child: Text(
             AppTextStrings.featureHeading,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: AppTheme.mainFontColor,
+              color: Theme.of(context).colorScheme.primary,
               fontSize: AppSizes.kFeatureTextFontSize,
-              fontFamily: AppTheme.kDefaultFontFamily,
             ),
           ),
         ),

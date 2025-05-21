@@ -1,9 +1,9 @@
-name: voice_assistant
-description: "A voice assistant application uses AI to generate response."
+name: virtual_assistant
+description: "A virtual assistant application uses AI to generate response."
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.6.0+1
+version: 1.7.0+1
 
 environment:
   sdk: ^3.7.2
@@ -18,7 +18,6 @@ dependencies:
   flutter_native_splash: ^2.4.6
   flutter_markdown: ^0.7.7+1
   flutter_bloc: ^9.1.1
-  # package_rename: ^1.10.0
 
 dev_dependencies:
   flutter_test:

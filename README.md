@@ -1,4 +1,4 @@
-# voice_assistant
+# virtual_assistant
 
 A new Flutter project.
 

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
 
-import 'package:voice_assistant/utils/constants/api/app_api.dart';
+import 'package:virtual_assistant/utils/constants/api/app_api.dart';
 
 class AIServices {
   final List<Object> contents = [];
