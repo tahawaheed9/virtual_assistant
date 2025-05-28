@@ -37,21 +37,24 @@ class ChatBubble extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: AppSizes.kPadding10),
           child:
               generatedContent != null
-                  ? Column(
-                    children: <Widget>[
-                      MarkdownBody(
-                        data: generatedContent!,
-                        styleSheet: MarkdownStyleSheet.fromTheme(
-                          Theme.of(context),
-                        ).copyWith(p: Theme.of(context).textTheme.bodyLarge),
-                      ),
-                      const SizedBox(height: 10.0),
-                      Divider(
-                        color: Theme.of(context).colorScheme.primaryContainer,
-                      ),
-                      const SizedBox(height: 10.0),
-                      const Text(AppTextStrings.disclaimer),
-                    ],
+                  ? ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: AppSizes.kMaxWidth),
+                    child: Column(
+                      children: <Widget>[
+                        MarkdownBody(
+                          data: generatedContent!,
+                          styleSheet: MarkdownStyleSheet.fromTheme(
+                            Theme.of(context),
+                          ).copyWith(p: Theme.of(context).textTheme.bodyLarge),
+                        ),
+                        const SizedBox(height: 10.0),
+                        Divider(
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                        ),
+                        const SizedBox(height: 10.0),
+                        const Text(AppTextStrings.disclaimer),
+                      ],
+                    ),
                   )
                   : Text(
                     AppTextStrings.homeViewGreetingText,

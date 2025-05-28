@@ -58,11 +58,13 @@ class HomeView extends StatelessWidget {
           } else if (state is LoadedHomeState) {
             return SingleChildScrollView(
               padding: const EdgeInsets.all(AppSizes.kDefaultPadding),
-              child: Column(
-                children: <Widget>[
-                  const AssistantAvatar(),
-                  ChatBubble(generatedContent: state.response),
-                ],
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    const AssistantAvatar(),
+                    ChatBubble(generatedContent: state.response),
+                  ],
+                ),
               ),
             );
           }

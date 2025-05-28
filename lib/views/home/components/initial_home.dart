@@ -19,35 +19,37 @@ class InitialHome extends StatelessWidget {
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppSizes.kDefaultPadding),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: AppSizes.kMaxWidth),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            const AssistantAvatar(),
-            ChatBubble(generatedContent: null),
-            const FeaturesText(),
-            Column(
-              children: <Widget>[
-                SlideInLeft(
-                  delay: Duration(milliseconds: animationStart),
-                  child: FeatureBox(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    featureTitle: AppTextStrings.firstFeatureTitle,
-                    featureDescription: AppTextStrings.firstFeatureDescription,
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: AppSizes.kMaxWidth),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              const AssistantAvatar(),
+              ChatBubble(generatedContent: null),
+              const FeaturesText(),
+              Column(
+                children: <Widget>[
+                  SlideInLeft(
+                    delay: Duration(milliseconds: animationStart),
+                    child: FeatureBox(
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                      featureTitle: AppTextStrings.firstFeatureTitle,
+                      featureDescription: AppTextStrings.firstFeatureDescription,
+                    ),
                   ),
-                ),
-                SlideInRight(
-                  delay: Duration(milliseconds: animationStart + animationDelay),
-                  child: FeatureBox(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                    featureTitle: AppTextStrings.secondFeatureTitle,
-                    featureDescription: AppTextStrings.secondFeatureDescription,
+                  SlideInRight(
+                    delay: Duration(milliseconds: animationStart + animationDelay),
+                    child: FeatureBox(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      featureTitle: AppTextStrings.secondFeatureTitle,
+                      featureDescription: AppTextStrings.secondFeatureDescription,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
