@@ -9,17 +9,19 @@ class CustomHeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        const SizedBox(height: AppSizes.kSpaceBetweenItems),
-        Text(
-          headingTitle,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-        ),
-      ],
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Column(
+        children: <Widget>[
+          const SizedBox(height: AppSizes.kSpaceBetweenItems),
+          Text(
+            headingTitle,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
     );
   }
 }

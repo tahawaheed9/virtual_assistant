@@ -6,8 +6,24 @@ import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
 class HelperFunctions {
   HelperFunctions._();
 
+  static Widget showLoadingScreen(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const CircularProgressIndicator(),
+          const SizedBox(height: AppSizes.kSpaceBetweenSections),
+          Text(
+            'Generating Response...',
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        ],
+      ),
+    );
+  }
+
   static ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
-  showSnackbar({
+  showSnackBar({
     required BuildContext context,
     required SnackBarType type,
     required String message,

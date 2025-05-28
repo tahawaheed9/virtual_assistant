@@ -8,13 +8,8 @@ import 'package:virtual_assistant/utils/constants/theme/text_strings.dart';
 
 class ChatBubble extends StatelessWidget {
   final String? generatedContent;
-  final String? generatedImageURL;
 
-  const ChatBubble({
-    super.key,
-    required this.generatedContent,
-    required this.generatedImageURL,
-  });
+  const ChatBubble({super.key, required this.generatedContent});
 
   @override
   Widget build(BuildContext context) {
@@ -41,38 +36,26 @@ class ChatBubble extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: AppSizes.kPadding10),
           child:
-              generatedImageURL == null
-                  ? generatedContent != null
-                      ? Column(
-                        children: <Widget>[
-                          MarkdownBody(
-                            data: generatedContent!,
-                            styleSheet: MarkdownStyleSheet.fromTheme(
-                              Theme.of(context),
-                            ).copyWith(
-                              p: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                          ),
-                          const SizedBox(height: 10.0),
-                          Divider(),
-                          const SizedBox(height: 10.0),
-                          const Text(AppTextStrings.disclaimer),
-                        ],
-                      )
-                      : Text(
-                        AppTextStrings.homeViewGreetingText,
-                        style: TextStyle(
-                          fontSize:
-                              generatedContent == null
-                                  ? AppSizes.kGreetingFontSize
-                                  : AppSizes.kAIResponseFontSize,
-                        ),
-                      )
-                  : ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                      AppSizes.kResponseImageRadius,
-                    ),
-                    child: Image.network(generatedImageURL!),
+              generatedContent != null
+                  ? Column(
+                    children: <Widget>[
+                      MarkdownBody(
+                        data: generatedContent!,
+                        styleSheet: MarkdownStyleSheet.fromTheme(
+                          Theme.of(context),
+                        ).copyWith(p: Theme.of(context).textTheme.bodyLarge),
+                      ),
+                      const SizedBox(height: 10.0),
+                      Divider(
+                        color: Theme.of(context).colorScheme.primaryContainer,
+                      ),
+                      const SizedBox(height: 10.0),
+                      const Text(AppTextStrings.disclaimer),
+                    ],
+                  )
+                  : Text(
+                    AppTextStrings.homeViewGreetingText,
+                    style: TextStyle(fontSize: AppSizes.kGreetingFontSize),
                   ),
         ),
       ),

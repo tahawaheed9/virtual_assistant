@@ -45,4 +45,4 @@ app.*.map.json
 /android/app/release
 
 # Api Folder
-lib/utils/api/
+lib/utils/constants/api/

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:virtual_assistant/views/home/home_view.dart';
+import 'package:virtual_assistant/services/ai_services.dart';
+import 'package:virtual_assistant/views/home/bloc/home_bloc.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_theme.dart';
+import 'package:virtual_assistant/services/speech_to_text_services.dart';
 import 'package:virtual_assistant/utils/constants/routes/app_routes.dart';
 import 'package:virtual_assistant/utils/constants/theme/text_strings.dart';
 
@@ -43,7 +48,10 @@ class MyApp extends StatelessWidget {
               : appTheme.darkTheme(),
       debugShowCheckedModeBanner: false,
       routes: AppRoutes.routes,
-      home: const HomeView(),
+      home: BlocProvider<HomeBloc>(
+        create: (_) => HomeBloc(SpeechToTextServices(), AIServices()),
+        child: const HomeView(),
+      ),
     );
   }
 }
