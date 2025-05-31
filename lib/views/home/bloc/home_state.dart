@@ -1,4 +1,7 @@
-abstract class HomeState {
+import 'package:flutter/foundation.dart';
+
+@immutable
+sealed class HomeState {
   final bool isChatEnabled;
 
   const HomeState({this.isChatEnabled = true});

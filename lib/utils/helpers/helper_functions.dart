@@ -31,7 +31,9 @@ class HelperFunctions {
     return ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor:
-            type == SnackBarType.success
+            type == SnackBarType.general
+                ? Theme.of(context).colorScheme.primaryContainer
+                : type == SnackBarType.success
                 ? Colors.green[800]
                 : type == SnackBarType.warning
                 ? Colors.orange[800]
@@ -45,7 +47,9 @@ class HelperFunctions {
           children: <Widget>[
             Icon(
               color: Colors.white,
-              type == SnackBarType.success
+              type == SnackBarType.general
+                  ? Icons.notifications_outlined
+                  : type == SnackBarType.success
                   ? Icons.check_circle_outline
                   : type == SnackBarType.warning
                   ? Icons.warning_amber_rounded

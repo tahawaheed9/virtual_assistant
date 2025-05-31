@@ -41,6 +41,7 @@ class HomeView extends StatelessWidget {
       ),
       drawer: AppDrawer(),
       drawerEnableOpenDragGesture: false,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: BlocConsumer<HomeBloc, HomeState>(
         bloc: context.read<HomeBloc>(),
         listener: (context, state) {

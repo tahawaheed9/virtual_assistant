@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-abstract class HomeEvent {
+sealed class HomeEvent {
   const HomeEvent();
 }
 

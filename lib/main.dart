@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:virtual_assistant/views/home/home_view.dart';
-import 'package:virtual_assistant/services/ai_services.dart';
-import 'package:virtual_assistant/views/home/bloc/home_bloc.dart';
-import 'package:virtual_assistant/utils/constants/theme/app_theme.dart';
-import 'package:virtual_assistant/services/speech_to_text_services.dart';
-import 'package:virtual_assistant/utils/constants/routes/app_routes.dart';
-import 'package:virtual_assistant/utils/constants/theme/text_strings.dart';
+import 'package:virtual_assistant/app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,30 +20,4 @@ void main() {
   );
 
   runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // Getting the theme of the system...
-    final brightness = View.of(context).platformDispatcher.platformBrightness;
-
-    final AppTheme appTheme = AppTheme();
-
-    return MaterialApp(
-      title: AppTextStrings.appTitle,
-      theme:
-          brightness == Brightness.light
-              ? appTheme.lightTheme()
-              : appTheme.darkTheme(),
-      debugShowCheckedModeBanner: false,
-      routes: AppRoutes.routes,
-      home: BlocProvider<HomeBloc>(
-        create: (_) => HomeBloc(SpeechToTextServices(), AIServices()),
-        child: const HomeView(),
-      ),
-    );
-  }
 }
