@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 
 import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
-import 'package:virtual_assistant/utils/constants/theme/text_strings.dart';
+import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
 
 class FeaturesText extends StatelessWidget {
   const FeaturesText({super.key});

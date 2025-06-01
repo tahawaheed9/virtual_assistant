@@ -22,6 +22,5 @@ class ToggleButtonThemeEvent extends ThemeEvent {
           isDarkTheme == other.isDarkTheme;
 
   @override
-  // TODO: implement hashCode
   int get hashCode => isDarkTheme.hashCode;
 }

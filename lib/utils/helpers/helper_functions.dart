@@ -37,7 +37,7 @@ class HelperFunctions {
                 ? Colors.green[800]
                 : type == SnackBarType.warning
                 ? Colors.orange[800]
-                : Theme.of(context).colorScheme.error,
+                : Theme.of(context).colorScheme.errorContainer,
         behavior: SnackBarBehavior.floating,
         padding: const EdgeInsets.all(AppSizes.kSnackBarContentPadding),
         shape: RoundedRectangleBorder(

@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:virtual_assistant/utils/constants/app_enums.dart';
 import 'package:virtual_assistant/views/home/bloc/home_bloc.dart';
 import 'package:virtual_assistant/views/home/bloc/home_event.dart';
 import 'package:virtual_assistant/utils/helpers/helper_functions.dart';
-import 'package:virtual_assistant/services/speech_to_text_services.dart';
-import 'package:virtual_assistant/utils/constants/theme/text_strings.dart';
+import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
+import 'package:virtual_assistant/views/home/bloc/home_state.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
-  final HomeBloc homeBloc;
-
-  const BottomNavigationWidget({super.key, required this.homeBloc});
+  const BottomNavigationWidget({super.key});
 
   @override
   State<BottomNavigationWidget> createState() => _BottomNavigationWidgetState();
 }
 
 class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
-  late final SpeechToTextServices _speechToTextServices;
   late final TextEditingController _chat;
 
   final int animationStart = 200;
@@ -28,7 +26,6 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   @override
   void initState() {
     super.initState();
-    _speechToTextServices = SpeechToTextServices();
     _chat = TextEditingController();
   }
 
@@ -70,32 +67,39 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                 delay: Duration(
                   milliseconds: animationStart + (2 * animationDelay),
                 ),
-                child: TextFormField(
-                  controller: _chat,
-                  maxLines: null,
-                  enabled: widget.homeBloc.state.isChatEnabled,
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.send,
-                  decoration: InputDecoration(
-                    hintText: AppTextStrings.textFieldHint,
-                    focusedBorder: textFieldBorder,
-                    border: textFieldBorder,
-                    prefixIcon: Icon(
-                      Icons.chat_outlined,
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
-                    suffixIcon: GestureDetector(
-                      onTap: () async => _onSendButtonPressed(),
-                      child: Tooltip(
-                        message: AppTextStrings.sendButtonText,
-                        child: Icon(
+                child: BlocBuilder(
+                  builder: (context, state) {
+                    return TextFormField(
+                      controller: _chat,
+                      maxLines: null,
+                      enabled: context.watch<HomeBloc>().state.isChatEnabled,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.send,
+                      decoration: InputDecoration(
+                        hintText: AppTextStrings.textFieldHint,
+                        focusedBorder: textFieldBorder,
+                        border: textFieldBorder,
+                        prefixIcon: Icon(
+                          Icons.chat_outlined,
                           color:
                               Theme.of(context).colorScheme.onPrimaryContainer,
-                          Icons.send_outlined,
+                        ),
+                        suffixIcon: GestureDetector(
+                          onTap: () async => _onSendButtonPressed(),
+                          child: Tooltip(
+                            message: AppTextStrings.sendButtonText,
+                            child: Icon(
+                              color:
+                                  Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimaryContainer,
+                              Icons.send_outlined,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
             ),
@@ -111,20 +115,25 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                   backgroundColor:
                       Theme.of(context).colorScheme.primaryContainer,
                 ),
-                constraints: BoxConstraints(minWidth: 50, minHeight: 50),
+                constraints: const BoxConstraints(minWidth: 50, minHeight: 50),
                 onPressed: () {
-                  widget.homeBloc.add(
+                  context.read<HomeBloc>().add(
                     SpeechButtonPressedHomeEvent(
                       context: context,
-                      isChatEnabled: widget.homeBloc.state.isChatEnabled,
+                      isChatEnabled:
+                          context.watch<HomeBloc>().state.isChatEnabled,
                     ),
                   );
                 },
-                icon: Icon(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  _speechToTextServices.isListening
-                      ? Icons.stop_circle_outlined
-                      : Icons.mic_outlined,
+                icon: BlocBuilder<HomeBloc, HomeState>(
+                  builder: (context, state) {
+                    return Icon(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      context.watch<HomeBloc>().state.isChatEnabled
+                          ? Icons.mic_outlined
+                          : Icons.stop_circle_outlined,
+                    );
+                  },
                 ),
               ),
             ),
@@ -137,7 +146,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   Future<void> _onSendButtonPressed() async {
     final prompt = _chat.text.trim();
     if (prompt.isNotEmpty) {
-      widget.homeBloc.add(SendButtonPressedHomeEvent(prompt: prompt));
+      context.read<HomeBloc>().add(SendButtonPressedHomeEvent(prompt: prompt));
       _chat.clear();
     } else {
       HelperFunctions.showSnackBar(

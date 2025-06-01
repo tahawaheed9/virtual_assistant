@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
-import 'package:virtual_assistant/utils/constants/theme/text_strings.dart';
+import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
+import 'package:virtual_assistant/views/home/components/response_text.dart';
 
-class ChatBubble extends StatelessWidget {
+class ResponseBubble extends StatelessWidget {
   final String? generatedContent;
 
-  const ChatBubble({super.key, required this.generatedContent});
+  const ResponseBubble({super.key, required this.generatedContent});
 
   @override
   Widget build(BuildContext context) {
@@ -37,25 +37,7 @@ class ChatBubble extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: AppSizes.kPadding10),
           child:
               generatedContent != null
-                  ? ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: AppSizes.kMaxWidth),
-                    child: Column(
-                      children: <Widget>[
-                        MarkdownBody(
-                          data: generatedContent!,
-                          styleSheet: MarkdownStyleSheet.fromTheme(
-                            Theme.of(context),
-                          ).copyWith(p: Theme.of(context).textTheme.bodyLarge),
-                        ),
-                        const SizedBox(height: 10.0),
-                        Divider(
-                          color: Theme.of(context).colorScheme.primaryContainer,
-                        ),
-                        const SizedBox(height: 10.0),
-                        const Text(AppTextStrings.disclaimer),
-                      ],
-                    ),
-                  )
+                  ? ResponseBox(generatedContent: generatedContent!)
                   : Text(
                     AppTextStrings.homeViewGreetingText,
                     style: TextStyle(fontSize: AppSizes.kGreetingFontSize),

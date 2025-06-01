@@ -23,7 +23,7 @@ class AppTheme {
       onTertiaryContainer: Color(0xff573e5c),
       error: Color(0xffba1a1a),
       onError: Color(0xffffffff),
-      errorContainer: Color(0xffffdad6),
+      errorContainer: Color(0xff93000a),
       onErrorContainer: Color(0xff93000a),
       surface: Color(0xfff9f9ff),
       onSurface: Color(0xff191c20),

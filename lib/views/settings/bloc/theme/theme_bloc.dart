@@ -7,11 +7,11 @@ import 'package:virtual_assistant/views/settings/bloc/theme/theme_state.dart';
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   final AppTheme _appTheme = AppTheme();
-  final SharedPreferencesUtils _sharedPreferencesUtils;
+  final SharedPreferencesUtils _sharedPreferencesUtils =
+      SharedPreferencesUtils();
 
-  ThemeBloc(SharedPreferencesUtils sharedPreferencesUtils)
-    : _sharedPreferencesUtils = sharedPreferencesUtils,
-      super(
+  ThemeBloc()
+    : super(
         ThemeState(themeData: AppTheme().lightTheme(), isDarkTheme: false),
       ) {
     on<LoadThemeEvent>((event, emit) async {

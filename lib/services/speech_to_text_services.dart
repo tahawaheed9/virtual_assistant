@@ -1,48 +1,36 @@
 import 'package:flutter/material.dart';
 
 import 'package:speech_to_text/speech_to_text.dart';
-
-import 'package:virtual_assistant/utils/constants/app_enums.dart';
-import 'package:virtual_assistant/utils/helpers/helper_functions.dart';
-import 'package:virtual_assistant/utils/constants/theme/text_strings.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
 
 class SpeechToTextServices {
   final SpeechToText _speechToText = SpeechToText();
 
   // Init Speech To Text...
-  Future<void> initSpeechToText(BuildContext context) async {
-    await _speechToText
-        .initialize(
-          onStatus: (status) => debugPrint('Status: $status'),
-          onError: (error) => debugPrint('Error: $error'),
-        )
-        .then(<bool>(value) {
-          if (!value) {
-            HelperFunctions.showSnackBar(
-              context: context,
-              type: SnackBarType.error,
-              message: AppTextStrings.onError,
-            );
-          }
-        });
+  Future<bool> initSpeechToText() async {
+    final isSpeechEnabled = await _speechToText.initialize(
+      onStatus: (status) => debugPrint('Status: $status'),
+      onError: (error) => debugPrint('Error: $error'),
+    );
+    return isSpeechEnabled;
   }
 
   // Start Listening to the User...
-  Future<String> startListening() async {
-    String recognizedWords = '';
-
+  Future<void> startListening() async {
     await _speechToText.listen(
-      onResult: (onSpeechResult) {
-        recognizedWords = onSpeechResult.recognizedWords;
-        debugPrint(recognizedWords);
-      },
+      localeId: 'en_US',
+      onResult: getRecognizedSpeech,
     );
-    return recognizedWords;
   }
 
   // Stop Listening...
   Future<void> stopListening() async {
     await _speechToText.stop();
+  }
+
+  String getRecognizedSpeech(SpeechRecognitionResult result) {
+    final recognizedSpeech = result.recognizedWords;
+    return recognizedSpeech;
   }
 
   /// Getting the instance of [isListening]...

@@ -4,22 +4,39 @@ class AppTextStrings {
   // App Title...
   static const String appTitle = 'Virtual Assistant';
 
+  // Appbar Titles...
+  static const String homeViewTitle = 'Virtual Assistant';
+
+  // App Drawer...
+  static const String appDrawerHeading = 'M E N U';
+  static const String appDrawerSettingTileText = 'Settings';
+
   // Tooltips...
   static const String textFieldHint = 'Type your prompt...';
   static const String sendButtonText = 'Send';
 
-  // Appbar Titles...
-  static const String homeViewTitle = 'Virtual Assistant';
+  // SnackBar Messages...
+  static const String onEmptyField =
+      'Please type the prompt or use the speech.';
+  static const String onSpeechAvailable = 'Speech is now available!';
+  static const String onSpeechError = 'Could not load Speech.';
+  static const String onUnableToLaunchURL = 'Unable to launch the url';
+  static const String onNullResponse = 'Could not fetch the response.';
 
+  /* ------------ Home Page Text ------------ */
+
+  // Response Bubble Greeting Text...
   static const String homeViewGreetingText =
       'Greetings! what task can I do for you?';
 
+  // Feature Text...
   static const String featureHeading = 'Here are a few features.';
 
   // Feature Box Suggestions Title...
   static const String firstFeatureTitle = 'Gemini';
   static const String secondFeatureTitle = 'Smart Voice Assistant';
 
+  // Response Text Disclaimer...
   static const String disclaimer =
       '$firstFeatureTitle makes mistakes, so double-check it.';
 
@@ -31,8 +48,9 @@ class AppTextStrings {
       'powered by $firstFeatureTitle AI. Whether you need quick answers, task '
       'help, or just a friendly chat, our assistant is here to help.';
 
-  // Snackbar Messages...
-  static const String onEmptyField = 'Please type the prompt or use the speech.';
-  static const String onSpeechAvailable = 'Speech is now available!';
-  static const String onError = 'Could not load Speech.';
+  /* ------------ Settings Page Text ------------ */
+  static const String settingsAppBarTitle = 'Settings';
+  static const String appearanceHeading = 'Appearance';
+  static const String darkThemeHeading = 'Dark theme';
+  static const String darkThemeSubtitle = 'Will never turn off automatically';
 }
