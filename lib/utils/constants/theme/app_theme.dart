@@ -88,7 +88,7 @@ class AppTheme {
       shadow: Color(0xff000000),
       scrim: Color(0xff000000),
       inverseSurface: Color(0xffe2e2e9),
-      inversePrimary: Color(0xff415f91),
+      inversePrimary: Color(0xff5f86cc),
       primaryFixed: Color(0xffd6e3ff),
       onPrimaryFixed: Color(0xff001b3e),
       primaryFixedDim: Color(0xffaac7ff),

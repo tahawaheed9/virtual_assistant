@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 
 import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
-import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
 import 'package:virtual_assistant/views/home/components/response_text.dart';
+import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
 
 class ResponseBubble extends StatelessWidget {
   final String? generatedContent;

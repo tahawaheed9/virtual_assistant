@@ -4,9 +4,9 @@ import 'package:animate_do/animate_do.dart';
 
 import 'package:virtual_assistant/views/components/feature_box.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
+import 'package:virtual_assistant/views/home/components/features_text.dart';
 import 'package:virtual_assistant/views/home/components/response_bubble.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
-import 'package:virtual_assistant/views/home/components/features_text.dart';
 import 'package:virtual_assistant/views/home/components/assistant_avatar.dart';
 
 class InitialHome extends StatelessWidget {

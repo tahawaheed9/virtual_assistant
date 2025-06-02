@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:virtual_assistant/utils/constants/app_enums.dart';
+import 'package:virtual_assistant/model/snack_bar/snack_bar_type.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
 
 class HelperFunctions {
@@ -30,14 +30,7 @@ class HelperFunctions {
   }) {
     return ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor:
-            type == SnackBarType.general
-                ? Theme.of(context).colorScheme.primaryContainer
-                : type == SnackBarType.success
-                ? Colors.green[800]
-                : type == SnackBarType.warning
-                ? Colors.orange[800]
-                : Theme.of(context).colorScheme.errorContainer,
+        backgroundColor: type.backgroundColor(context),
         behavior: SnackBarBehavior.floating,
         padding: const EdgeInsets.all(AppSizes.kSnackBarContentPadding),
         shape: RoundedRectangleBorder(
@@ -45,19 +38,10 @@ class HelperFunctions {
         ),
         content: Row(
           children: <Widget>[
-            Icon(
-              color: Colors.white,
-              type == SnackBarType.general
-                  ? Icons.notifications_outlined
-                  : type == SnackBarType.success
-                  ? Icons.check_circle_outline
-                  : type == SnackBarType.warning
-                  ? Icons.warning_amber_rounded
-                  : Icons.error_outline,
-            ),
+            Icon(type.icon, color: type.iconColor),
             const SizedBox(width: AppSizes.kSnackBarSpaceBetweenItems),
             Flexible(
-              child: Text(message, style: const TextStyle(color: Colors.white)),
+              child: Text(message, style: TextStyle(color: type.textColor)),
             ),
           ],
         ),

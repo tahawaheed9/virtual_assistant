@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:virtual_assistant/utils/constants/app_enums.dart';
 import 'package:virtual_assistant/views/home/bloc/home_bloc.dart';
 import 'package:virtual_assistant/views/home/bloc/home_event.dart';
+import 'package:virtual_assistant/views/home/bloc/home_state.dart';
+import 'package:virtual_assistant/model/snack_bar/snack_bar_type.dart';
 import 'package:virtual_assistant/utils/helpers/helper_functions.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
-import 'package:virtual_assistant/views/home/bloc/home_state.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
   const BottomNavigationWidget({super.key});
@@ -67,7 +67,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                 delay: Duration(
                   milliseconds: animationStart + (2 * animationDelay),
                 ),
-                child: BlocBuilder(
+                child: BlocBuilder<HomeBloc, HomeState>(
                   builder: (context, state) {
                     return TextFormField(
                       controller: _chat,
