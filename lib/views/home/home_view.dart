@@ -17,21 +17,31 @@ import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
 import 'package:virtual_assistant/views/home/components/assistant_avatar.dart';
 import 'package:virtual_assistant/views/home/components/bottom_navigation_widget.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  State<HomeView> createState() => _HomeViewState();
+}
 
+class _HomeViewState extends State<HomeView> {
+  late final GlobalKey<ScaffoldState> _scaffoldKey;
+
+  @override
+  void initState() {
+    super.initState();
+    _scaffoldKey = GlobalKey<ScaffoldState>();
     context.read<HomeBloc>().add(InitialHomeEvent(context: context));
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
+      key: _scaffoldKey,
       appBar: CustomAppBar(
         leading: IconButton(
           tooltip: 'Open drawer',
-          onPressed: () => scaffoldKey.currentState!.openDrawer(),
+          onPressed: () => _scaffoldKey.currentState!.openDrawer(),
           icon: Icon(
             Icons.menu_outlined,
             color: Theme.of(context).colorScheme.primary,
@@ -39,11 +49,11 @@ class HomeView extends StatelessWidget {
         ),
         title: BounceIn(child: const Text(AppTextStrings.homeViewTitle)),
       ),
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       resizeToAvoidBottomInset: true,
       drawerEnableOpenDragGesture: false,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      bottomNavigationBar: BottomNavigationWidget(),
+      bottomNavigationBar: const BottomNavigationWidget(),
       body: BlocListener<HomeBloc, HomeState>(
         bloc: context.read<HomeBloc>(),
         listener: (context, state) {
@@ -64,6 +74,7 @@ class HomeView extends StatelessWidget {
               return HelperFunctions.showLoadingScreen(context);
             } else if (state is LoadedHomeState) {
               return SingleChildScrollView(
+                key: const PageStorageKey('home_scroll_view'),
                 padding: const EdgeInsets.all(AppSizes.kDefaultPadding),
                 child: Center(
                   child: Column(

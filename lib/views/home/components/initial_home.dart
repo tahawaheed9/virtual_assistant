@@ -18,10 +18,11 @@ class InitialHome extends StatelessWidget {
     final int animationDelay = 200;
 
     return SingleChildScrollView(
+      key: const PageStorageKey('home_scroll_view'),
       padding: const EdgeInsets.all(AppSizes.kDefaultPadding),
       child: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: AppSizes.kMaxWidth),
+          constraints: const BoxConstraints(maxWidth: AppSizes.kMaxWidth),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -35,15 +36,19 @@ class InitialHome extends StatelessWidget {
                     child: FeatureBox(
                       color: Theme.of(context).colorScheme.primaryContainer,
                       featureTitle: AppTextStrings.firstFeatureTitle,
-                      featureDescription: AppTextStrings.firstFeatureDescription,
+                      featureDescription:
+                          AppTextStrings.firstFeatureDescription,
                     ),
                   ),
                   SlideInRight(
-                    delay: Duration(milliseconds: animationStart + animationDelay),
+                    delay: Duration(
+                      milliseconds: animationStart + animationDelay,
+                    ),
                     child: FeatureBox(
                       color: Theme.of(context).colorScheme.inversePrimary,
                       featureTitle: AppTextStrings.secondFeatureTitle,
-                      featureDescription: AppTextStrings.secondFeatureDescription,
+                      featureDescription:
+                          AppTextStrings.secondFeatureDescription,
                     ),
                   ),
                 ],

@@ -38,7 +38,7 @@ class ResponseBubble extends StatelessWidget {
           child:
               generatedContent != null
                   ? ResponseBox(generatedContent: generatedContent!)
-                  : Text(
+                  : const Text(
                     AppTextStrings.homeViewGreetingText,
                     style: TextStyle(fontSize: AppSizes.kGreetingFontSize),
                   ),

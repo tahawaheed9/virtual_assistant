@@ -14,11 +14,9 @@ class SettingsView extends StatelessWidget {
       appBar: CustomAppBar(
         title: const Text(AppTextStrings.settingsAppBarTitle),
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         padding: EdgeInsets.all(AppSizes.kDefaultPadding),
-        child: Center(
-          child: Column(children: <Widget>[const AppearanceSettings()]),
-        ),
+        child: Center(child: Column(children: <Widget>[AppearanceSettings()])),
       ),
     );
   }

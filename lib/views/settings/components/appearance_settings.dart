@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:virtual_assistant/views/components/custom_heading.dart';
-import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
 import 'package:virtual_assistant/views/components/custom_app_divider.dart';
 import 'package:virtual_assistant/views/settings/bloc/theme/theme_bloc.dart';
 import 'package:virtual_assistant/views/settings/bloc/theme/theme_event.dart';
 import 'package:virtual_assistant/views/settings/bloc/theme/theme_state.dart';
+import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
 
 class AppearanceSettings extends StatelessWidget {
   const AppearanceSettings({super.key});
@@ -17,7 +17,7 @@ class AppearanceSettings extends StatelessWidget {
     return Column(
       children: <Widget>[
         // Settings Heading...
-        CustomHeading(headingTitle: AppTextStrings.appearanceHeading),
+        const CustomHeading(headingTitle: AppTextStrings.appearanceHeading),
 
         // Dark Theme...
         ListTile(
