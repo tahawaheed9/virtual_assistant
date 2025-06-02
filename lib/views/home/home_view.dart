@@ -24,71 +24,99 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<HomeView>
+    with AutomaticKeepAliveClientMixin {
   late final GlobalKey<ScaffoldState> _scaffoldKey;
+  static const String _pageStorageKey = 'home_view_state';
+  bool _hasInitialized = false;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
     _scaffoldKey = GlobalKey<ScaffoldState>();
-    context.read<HomeBloc>().add(InitialHomeEvent(context: context));
+
+    // Initialize only once when the app starts
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_hasInitialized) {
+        final currentState = context.read<HomeBloc>().state;
+
+        // Only trigger initialization if we're in true initial state
+        // (not restored state)
+        if (currentState is InitialHomeState) {
+          context.read<HomeBloc>().add(InitialHomeEvent(context: context));
+        }
+        _hasInitialized = true;
+      }
+    });
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: CustomAppBar(
-        leading: IconButton(
-          tooltip: 'Open drawer',
-          onPressed: () => _scaffoldKey.currentState!.openDrawer(),
-          icon: Icon(
-            Icons.menu_outlined,
-            color: Theme.of(context).colorScheme.primary,
+    super.build(context);
+    return KeyedSubtree(
+      key: PageStorageKey(_pageStorageKey),
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: CustomAppBar(
+          leading: IconButton(
+            tooltip: 'Open drawer',
+            onPressed: () {
+              if (_scaffoldKey.currentState != null) {
+                _scaffoldKey.currentState!.openDrawer();
+              }
+            },
+            icon: Icon(
+              Icons.menu_outlined,
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
+          title: BounceIn(child: const Text(AppTextStrings.homeViewTitle)),
         ),
-        title: BounceIn(child: const Text(AppTextStrings.homeViewTitle)),
-      ),
-      drawer: const AppDrawer(),
-      resizeToAvoidBottomInset: true,
-      drawerEnableOpenDragGesture: false,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      bottomNavigationBar: const BottomNavigationWidget(),
-      body: BlocListener<HomeBloc, HomeState>(
-        bloc: context.read<HomeBloc>(),
-        listener: (context, state) {
-          if (state is ErrorHomeState) {
-            HelperFunctions.showSnackBar(
-              context: context,
-              type: SnackBarType.error,
-              message: state.error,
-            );
-          }
-        },
-        child: BlocBuilder<HomeBloc, HomeState>(
-          builder: (context, state) {
-            if (state is InitialHomeState) {
-              return const InitialHome();
-            }
-            if (state is LoadingHomeState) {
-              return HelperFunctions.showLoadingScreen(context);
-            } else if (state is LoadedHomeState) {
-              return SingleChildScrollView(
-                key: const PageStorageKey('home_scroll_view'),
-                padding: const EdgeInsets.all(AppSizes.kDefaultPadding),
-                child: Center(
-                  child: Column(
-                    children: <Widget>[
-                      const AssistantAvatar(),
-                      ResponseBubble(generatedContent: state.response),
-                    ],
-                  ),
-                ),
+        drawer: const AppDrawer(),
+        resizeToAvoidBottomInset: true,
+        drawerEnableOpenDragGesture: false,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        bottomNavigationBar: const BottomNavigationWidget(),
+        body: BlocListener<HomeBloc, HomeState>(
+          bloc: context.read<HomeBloc>(),
+          listener: (context, state) {
+            if (state is ErrorHomeState) {
+              HelperFunctions.showSnackBar(
+                context: context,
+                type: SnackBarType.error,
+                message: state.error,
               );
             }
-            // This state will never exist...
-            return const SizedBox.shrink();
           },
+          child: BlocBuilder<HomeBloc, HomeState>(
+            builder: (context, state) {
+              if (state is InitialHomeState) {
+                return const InitialHome();
+              }
+              if (state is LoadingHomeState) {
+                return HelperFunctions.showLoadingScreen(context);
+              } else if (state is LoadedHomeState) {
+                return SingleChildScrollView(
+                  key: const PageStorageKey('home_scroll_view'),
+                  padding: const EdgeInsets.all(AppSizes.kDefaultPadding),
+                  child: Center(
+                    child: Column(
+                      children: <Widget>[
+                        const AssistantAvatar(),
+                        ResponseBubble(generatedContent: state.response),
+                      ],
+                    ),
+                  ),
+                );
+              }
+              // This state will never exist...
+              return const SizedBox.shrink();
+            },
+          ),
         ),
       ),
     );

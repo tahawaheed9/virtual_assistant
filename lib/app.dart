@@ -8,6 +8,7 @@ import 'package:virtual_assistant/utils/constants/routes/app_routes.dart';
 import 'package:virtual_assistant/views/settings/bloc/theme/theme_bloc.dart';
 import 'package:virtual_assistant/views/settings/bloc/theme/theme_event.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
+import 'package:virtual_assistant/views/settings/bloc/theme/theme_state.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -21,12 +22,16 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<HomeBloc>(create: (_) => HomeBloc()),
       ],
-      child: MaterialApp(
-        title: AppTextStrings.appTitle,
-        theme: context.watch<ThemeBloc>().state.themeData,
-        debugShowCheckedModeBanner: false,
-        routes: AppRoutes.routes,
-        home: const HomeView(),
+      child: BlocBuilder<ThemeBloc, ThemeState>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: AppTextStrings.appTitle,
+            theme: state.themeData,
+            debugShowCheckedModeBanner: false,
+            routes: AppRoutes.routes,
+            home: const HomeView(),
+          );
+        },
       ),
     );
   }
