@@ -12,12 +12,8 @@ class InitialHomeEvent extends HomeEvent {
 
 class SpeechButtonPressedHomeEvent extends HomeEvent {
   final BuildContext context;
-  bool isChatEnabled;
 
-  SpeechButtonPressedHomeEvent({
-    required this.context,
-    required this.isChatEnabled,
-  });
+  SpeechButtonPressedHomeEvent({required this.context});
 }
 
 class SendButtonPressedHomeEvent extends HomeEvent {

@@ -9,12 +9,10 @@ import 'package:virtual_assistant/views/home/bloc/home_state.dart';
 import 'package:virtual_assistant/model/snack_bar/snack_bar_type.dart';
 import 'package:virtual_assistant/utils/helpers/helper_functions.dart';
 import 'package:virtual_assistant/views/components/custom_app_bar.dart';
-import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
 import 'package:virtual_assistant/views/home/components/app_drawer.dart';
 import 'package:virtual_assistant/views/home/components/initial_home.dart';
-import 'package:virtual_assistant/views/home/components/response_bubble.dart';
+import 'package:virtual_assistant/views/home/components/content_widget.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
-import 'package:virtual_assistant/views/home/components/assistant_avatar.dart';
 import 'package:virtual_assistant/views/home/components/bottom_navigation_widget.dart';
 
 class HomeView extends StatefulWidget {
@@ -28,6 +26,7 @@ class _HomeViewState extends State<HomeView>
     with AutomaticKeepAliveClientMixin {
   late final GlobalKey<ScaffoldState> _scaffoldKey;
   bool _hasInitialized = false;
+  String? _lastResponse;
 
   @override
   bool get wantKeepAlive => true;
@@ -87,8 +86,14 @@ class _HomeViewState extends State<HomeView>
           },
         ),
         body: BlocConsumer<HomeBloc, HomeState>(
-          bloc: context.read<HomeBloc>(),
           listener: (context, state) {
+            if (state is ListeningHomeState) {
+              HelperFunctions.showSnackBar(
+                context: context,
+                type: SnackBarType.general,
+                message: 'Listening...',
+              );
+            }
             if (state is ErrorHomeState) {
               HelperFunctions.showSnackBar(
                 context: context,
@@ -98,25 +103,18 @@ class _HomeViewState extends State<HomeView>
             }
           },
           builder: (context, state) {
-            if (state is InitialHomeState) {
-              return const InitialHome();
-            }
             if (state is LoadedHomeState) {
-              return SingleChildScrollView(
-                key: const PageStorageKey(AppTextStrings.homeViewKey),
-                padding: const EdgeInsets.all(AppSizes.kDefaultPadding),
-                child: Center(
-                  child: Column(
-                    children: <Widget>[
-                      const AssistantAvatar(),
-                      ResponseBubble(generatedContent: state.response),
-                    ],
-                  ),
-                ),
-              );
+              _lastResponse = state.response;
+              return ContentWidget(response: state.response);
             }
-            // This state will never exist...
-            return const SizedBox.shrink();
+            if (state is ListeningHomeState) {
+              if (_lastResponse != null) {
+                return ContentWidget(response: _lastResponse!);
+              } else {
+                return const InitialHome();
+              }
+            }
+            return const InitialHome();
           },
         ),
       ),

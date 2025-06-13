@@ -23,16 +23,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     // Triggers when speech button is pressed...
     on<SpeechButtonPressedHomeEvent>((event, emit) async {
-      // Disabling the chat while speech to text is enabled...
-      event.isChatEnabled = false;
-
       // If speech to text has permission and is not listening...
       if (await _speechToTextServices.hasPermission &&
           _speechToTextServices.isNotListening) {
+        emit(const ListeningHomeState());
         await _speechToTextServices.startListening();
       }
       // If speech to text is listening get the recognized words...
       else if (_speechToTextServices.isListening) {
+        // Stop speech to text...
+        await _speechToTextServices.stopListening();
+
         // Show loading screen while fetching the response...
         emit(const LoadingHomeState());
 
@@ -45,12 +46,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         } else {
           emit(const ErrorHomeState(error: AppTextStrings.onNullResponse));
         }
-
-        // Enable the chat for the user...
-        event.isChatEnabled = true;
-
-        // Stop speech to text...
-        await _speechToTextServices.stopListening();
       } else {
         await _speechToTextServices.initSpeechToText();
       }

@@ -2,23 +2,33 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 sealed class HomeState {
-  final bool isChatEnabled;
+  const HomeState();
 
-  const HomeState({this.isChatEnabled = true});
+  bool get isChatEnabled => true;
 }
 
 class InitialHomeState extends HomeState {
-  const InitialHomeState({super.isChatEnabled});
+  const InitialHomeState();
+
+  @override
+  bool get isChatEnabled => true;
 }
 
 class LoadingHomeState extends HomeState {
-  const LoadingHomeState({super.isChatEnabled});
+  const LoadingHomeState();
+}
+
+class ListeningHomeState extends HomeState {
+  const ListeningHomeState();
+
+  @override
+  bool get isChatEnabled => false;
 }
 
 class LoadedHomeState extends HomeState {
   final String response;
 
-  const LoadedHomeState({required this.response, super.isChatEnabled});
+  const LoadedHomeState({required this.response});
 }
 
 class ErrorHomeState extends HomeState {

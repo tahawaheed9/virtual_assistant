@@ -72,7 +72,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                     return TextFormField(
                       controller: _chat,
                       maxLines: null,
-                      enabled: context.watch<HomeBloc>().state.isChatEnabled,
+                      enabled: state.isChatEnabled,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
                       decoration: InputDecoration(
@@ -118,20 +118,16 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                 constraints: const BoxConstraints(minWidth: 50, minHeight: 50),
                 onPressed: () {
                   context.read<HomeBloc>().add(
-                    SpeechButtonPressedHomeEvent(
-                      context: context,
-                      isChatEnabled:
-                          context.watch<HomeBloc>().state.isChatEnabled,
-                    ),
+                    SpeechButtonPressedHomeEvent(context: context),
                   );
                 },
                 icon: BlocBuilder<HomeBloc, HomeState>(
                   builder: (context, state) {
                     return Icon(
+                      state is ListeningHomeState
+                          ? Icons.stop_circle_outlined
+                          : Icons.mic_outlined,
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      context.watch<HomeBloc>().state.isChatEnabled
-                          ? Icons.mic_outlined
-                          : Icons.stop_circle_outlined,
                     );
                   },
                 ),
