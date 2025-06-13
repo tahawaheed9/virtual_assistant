@@ -1,17 +1,18 @@
 class AppTextStrings {
   AppTextStrings._();
 
-  // App Title...
-  static const String appTitle = 'Virtual Assistant';
+  // PageStorage keys...
+  static const String homeViewKey = 'home_view_key';
 
-  // Appbar Titles...
-  static const String homeViewTitle = 'Virtual Assistant';
+  // App & Appbar Titles...
+  static const String appTitle = 'Virtual Assistant';
 
   // App Drawer...
   static const String appDrawerHeading = 'M E N U';
   static const String appDrawerSettingTileText = 'Settings';
 
   // Tooltips...
+  static const String menuButtonTooltip = 'Open drawer';
   static const String textFieldHint = 'Type your prompt...';
   static const String sendButtonText = 'Send';
 

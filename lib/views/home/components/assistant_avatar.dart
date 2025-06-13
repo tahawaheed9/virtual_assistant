@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 
 import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
-import 'package:virtual_assistant/utils/constants/path/images_path.dart';
+import 'package:virtual_assistant/utils/constants/assets_path/images_path.dart';
 
 class AssistantAvatar extends StatelessWidget {
   const AssistantAvatar({super.key});

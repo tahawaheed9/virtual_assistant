@@ -74,7 +74,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                       maxLines: null,
                       enabled: context.watch<HomeBloc>().state.isChatEnabled,
                       keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.send,
+                      textInputAction: TextInputAction.done,
                       decoration: InputDecoration(
                         hintText: AppTextStrings.textFieldHint,
                         focusedBorder: textFieldBorder,

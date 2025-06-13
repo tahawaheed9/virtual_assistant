@@ -27,7 +27,6 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView>
     with AutomaticKeepAliveClientMixin {
   late final GlobalKey<ScaffoldState> _scaffoldKey;
-  static const String _pageStorageKey = 'home_view_state';
   bool _hasInitialized = false;
 
   @override
@@ -51,19 +50,18 @@ class _HomeViewState extends State<HomeView>
         _hasInitialized = true;
       }
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return KeyedSubtree(
-      key: PageStorageKey(_pageStorageKey),
+      key: const PageStorageKey(AppTextStrings.homeViewKey),
       child: Scaffold(
         key: _scaffoldKey,
         appBar: CustomAppBar(
           leading: IconButton(
-            tooltip: 'Open drawer',
+            tooltip: AppTextStrings.menuButtonTooltip,
             onPressed: () {
               if (_scaffoldKey.currentState != null) {
                 _scaffoldKey.currentState!.openDrawer();
@@ -74,14 +72,21 @@ class _HomeViewState extends State<HomeView>
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
-          title: BounceIn(child: const Text(AppTextStrings.homeViewTitle)),
+          title: BounceIn(child: const Text(AppTextStrings.appTitle)),
         ),
         drawer: const AppDrawer(),
         resizeToAvoidBottomInset: true,
         drawerEnableOpenDragGesture: false,
         backgroundColor: Theme.of(context).colorScheme.surface,
-        bottomNavigationBar: const BottomNavigationWidget(),
-        body: BlocListener<HomeBloc, HomeState>(
+        bottomNavigationBar: BlocBuilder<HomeBloc, HomeState>(
+          builder: (context, state) {
+            if (state is LoadingHomeState) {
+              return HelperFunctions.showLoadingScreen(context);
+            }
+            return const BottomNavigationWidget();
+          },
+        ),
+        body: BlocConsumer<HomeBloc, HomeState>(
           bloc: context.read<HomeBloc>(),
           listener: (context, state) {
             if (state is ErrorHomeState) {
@@ -92,31 +97,27 @@ class _HomeViewState extends State<HomeView>
               );
             }
           },
-          child: BlocBuilder<HomeBloc, HomeState>(
-            builder: (context, state) {
-              if (state is InitialHomeState) {
-                return const InitialHome();
-              }
-              if (state is LoadingHomeState) {
-                return HelperFunctions.showLoadingScreen(context);
-              } else if (state is LoadedHomeState) {
-                return SingleChildScrollView(
-                  key: const PageStorageKey('home_scroll_view'),
-                  padding: const EdgeInsets.all(AppSizes.kDefaultPadding),
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        const AssistantAvatar(),
-                        ResponseBubble(generatedContent: state.response),
-                      ],
-                    ),
+          builder: (context, state) {
+            if (state is InitialHomeState) {
+              return const InitialHome();
+            }
+            if (state is LoadedHomeState) {
+              return SingleChildScrollView(
+                key: const PageStorageKey(AppTextStrings.homeViewKey),
+                padding: const EdgeInsets.all(AppSizes.kDefaultPadding),
+                child: Center(
+                  child: Column(
+                    children: <Widget>[
+                      const AssistantAvatar(),
+                      ResponseBubble(generatedContent: state.response),
+                    ],
                   ),
-                );
-              }
-              // This state will never exist...
-              return const SizedBox.shrink();
-            },
-          ),
+                ),
+              );
+            }
+            // This state will never exist...
+            return const SizedBox.shrink();
+          },
         ),
       ),
     );

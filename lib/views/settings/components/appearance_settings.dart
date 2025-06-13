@@ -20,24 +20,29 @@ class AppearanceSettings extends StatelessWidget {
         const CustomHeading(headingTitle: AppTextStrings.appearanceHeading),
 
         // Dark Theme...
-        ListTile(
-          title: const Text(
-            AppTextStrings.darkThemeHeading,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          subtitle: const Text(AppTextStrings.darkThemeSubtitle),
-          trailing: BlocBuilder<ThemeBloc, ThemeState>(
-            builder: (context, state) {
-              return Switch.adaptive(
+        BlocBuilder<ThemeBloc, ThemeState>(
+          builder: (context, state) {
+            return ListTile(
+              title: const Text(
+                AppTextStrings.darkThemeHeading,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: const Text(AppTextStrings.darkThemeSubtitle),
+              onTap: () {
+                context.read<ThemeBloc>().add(
+                  ToggleButtonThemeEvent(isDarkTheme: !state.isDarkTheme),
+                );
+              },
+              trailing: Switch.adaptive(
                 value: state.isDarkTheme,
-                onChanged: <bool>(value) {
+                onChanged: (_) {
                   context.read<ThemeBloc>().add(
                     ToggleButtonThemeEvent(isDarkTheme: !state.isDarkTheme),
                   );
                 },
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
 
         // Category End...
