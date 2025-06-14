@@ -118,7 +118,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                 constraints: const BoxConstraints(minWidth: 50, minHeight: 50),
                 onPressed: () {
                   context.read<HomeBloc>().add(
-                    SpeechButtonPressedHomeEvent(context: context),
+                    const SpeechButtonPressedHomeEvent(),
                   );
                 },
                 icon: BlocBuilder<HomeBloc, HomeState>(
@@ -147,7 +147,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
     } else {
       HelperFunctions.showSnackBar(
         context: context,
-        type: SnackBarType.warning,
+        snackBarType: SnackBarType.warning,
         message: AppTextStrings.onEmptyField,
       );
     }

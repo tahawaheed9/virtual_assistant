@@ -30,7 +30,7 @@ class ResponseBox extends StatelessWidget {
                 if (context.mounted) {
                   HelperFunctions.showSnackBar(
                     context: context,
-                    type: SnackBarType.error,
+                    snackBarType: SnackBarType.error,
                     message: AppTextStrings.onUnableToLaunchURL,
                   );
                 }

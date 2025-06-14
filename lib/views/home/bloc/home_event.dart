@@ -1,19 +1,16 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
+@immutable
 sealed class HomeEvent {
   const HomeEvent();
 }
 
 class InitialHomeEvent extends HomeEvent {
-  final BuildContext context;
-
-  const InitialHomeEvent({required this.context});
+  const InitialHomeEvent();
 }
 
 class SpeechButtonPressedHomeEvent extends HomeEvent {
-  final BuildContext context;
-
-  SpeechButtonPressedHomeEvent({required this.context});
+  const SpeechButtonPressedHomeEvent();
 }
 
 class SendButtonPressedHomeEvent extends HomeEvent {

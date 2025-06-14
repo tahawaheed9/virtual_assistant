@@ -9,9 +9,6 @@ sealed class HomeState {
 
 class InitialHomeState extends HomeState {
   const InitialHomeState();
-
-  @override
-  bool get isChatEnabled => true;
 }
 
 class LoadingHomeState extends HomeState {

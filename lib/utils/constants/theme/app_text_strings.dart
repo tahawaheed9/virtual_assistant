@@ -17,12 +17,16 @@ class AppTextStrings {
   static const String sendButtonText = 'Send';
 
   // SnackBar Messages...
+  static const String onListening = 'Listening...';
   static const String onEmptyField =
       'Please type the prompt or use the speech.';
   static const String onSpeechAvailable = 'Speech is now available!';
   static const String onSpeechError = 'Could not load Speech.';
   static const String onUnableToLaunchURL = 'Unable to launch the url';
   static const String onNullResponse = 'Could not fetch the response.';
+
+  // Loading Screen Message...
+  static const String onGeneratingResponse = 'Generating Response...';
 
   /* ------------ Home Page Text ------------ */
 

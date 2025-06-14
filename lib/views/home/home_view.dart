@@ -44,7 +44,7 @@ class _HomeViewState extends State<HomeView>
         // Only trigger initialization if we're in true initial state
         // (not restored state)
         if (currentState is InitialHomeState) {
-          context.read<HomeBloc>().add(InitialHomeEvent(context: context));
+          context.read<HomeBloc>().add(const InitialHomeEvent());
         }
         _hasInitialized = true;
       }
@@ -79,10 +79,10 @@ class _HomeViewState extends State<HomeView>
         backgroundColor: Theme.of(context).colorScheme.surface,
         bottomNavigationBar: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
-            if (state is LoadingHomeState) {
-              return HelperFunctions.showLoadingScreen(context);
+            if (state is !LoadingHomeState) {
+              return const BottomNavigationWidget();
             }
-            return const BottomNavigationWidget();
+            return const SizedBox.shrink();
           },
         ),
         body: BlocConsumer<HomeBloc, HomeState>(
@@ -90,19 +90,23 @@ class _HomeViewState extends State<HomeView>
             if (state is ListeningHomeState) {
               HelperFunctions.showSnackBar(
                 context: context,
-                type: SnackBarType.general,
-                message: 'Listening...',
+                snackBarType: SnackBarType.general,
+                message: AppTextStrings.onListening,
               );
             }
             if (state is ErrorHomeState) {
               HelperFunctions.showSnackBar(
                 context: context,
-                type: SnackBarType.error,
+                snackBarType: SnackBarType.error,
                 message: state.error,
               );
             }
           },
           builder: (context, state) {
+            if (state is LoadingHomeState) {
+              ScaffoldMessenger.of(context).clearSnackBars();
+              return HelperFunctions.showLoadingScreen(context);
+            }
             if (state is LoadedHomeState) {
               _lastResponse = state.response;
               return ContentWidget(response: state.response);
