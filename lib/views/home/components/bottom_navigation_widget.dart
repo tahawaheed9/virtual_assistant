@@ -8,17 +8,20 @@ import 'package:virtual_assistant/views/home/bloc/home_event.dart';
 import 'package:virtual_assistant/views/home/bloc/home_state.dart';
 import 'package:virtual_assistant/model/snack_bar/snack_bar_type.dart';
 import 'package:virtual_assistant/utils/helpers/helper_functions.dart';
+import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
-  const BottomNavigationWidget({super.key});
+  final HomeBloc homeBloc;
+
+  const BottomNavigationWidget({super.key, required this.homeBloc});
 
   @override
   State<BottomNavigationWidget> createState() => _BottomNavigationWidgetState();
 }
 
 class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
-  late final TextEditingController _chat;
+  late final TextEditingController _promptController;
 
   final int animationStart = 200;
   final int animationDelay = 200;
@@ -26,12 +29,12 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   @override
   void initState() {
     super.initState();
-    _chat = TextEditingController();
+    _promptController = TextEditingController();
   }
 
   @override
   void dispose() {
-    _chat.dispose();
+    _promptController.dispose();
     super.dispose();
   }
 
@@ -52,10 +55,10 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
       bottom: true,
       child: Container(
         padding: EdgeInsets.only(
-          top: 5.0,
-          left: 8.0,
-          right: 8.0,
-          bottom: 5.0 + keyboardInsets,
+          top: AppSizes.kVertical,
+          left: AppSizes.kHorizontal,
+          right: AppSizes.kHorizontal,
+          bottom: AppSizes.kVertical + keyboardInsets,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,13 +71,15 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                   milliseconds: animationStart + (2 * animationDelay),
                 ),
                 child: BlocBuilder<HomeBloc, HomeState>(
+                  bloc: widget.homeBloc,
                   builder: (context, state) {
                     return TextFormField(
-                      controller: _chat,
+                      controller: _promptController,
                       maxLines: null,
                       enabled: state.isChatEnabled,
                       keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
+                      textInputAction: TextInputAction.send,
+                      onFieldSubmitted: (_) => _onSendButtonPressed(),
                       decoration: InputDecoration(
                         hintText: AppTextStrings.textFieldHint,
                         focusedBorder: textFieldBorder,
@@ -85,7 +90,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                               Theme.of(context).colorScheme.onPrimaryContainer,
                         ),
                         suffixIcon: GestureDetector(
-                          onTap: () async => _onSendButtonPressed(),
+                          onTap: _onSendButtonPressed,
                           child: Tooltip(
                             message: AppTextStrings.sendButtonText,
                             child: Icon(
@@ -103,7 +108,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                 ),
               ),
             ),
-            const SizedBox(width: 10.0),
+            const SizedBox(width: AppSizes.kSnackBarSpaceBetweenItems),
 
             // Speech Button...
             SlideInRight(
@@ -115,13 +120,13 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                   backgroundColor:
                       Theme.of(context).colorScheme.primaryContainer,
                 ),
-                constraints: const BoxConstraints(minWidth: 50, minHeight: 50),
-                onPressed: () {
-                  context.read<HomeBloc>().add(
-                    const SpeechButtonPressedHomeEvent(),
-                  );
-                },
+                constraints: const BoxConstraints(
+                  minWidth: AppSizes.kMinSizeSpeechButton,
+                  minHeight: AppSizes.kMinSizeSpeechButton,
+                ),
+                onPressed: _onSpeechButtonPressed,
                 icon: BlocBuilder<HomeBloc, HomeState>(
+                  bloc: widget.homeBloc,
                   builder: (context, state) {
                     return Icon(
                       state is ListeningHomeState
@@ -139,17 +144,22 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
     );
   }
 
-  Future<void> _onSendButtonPressed() async {
-    final prompt = _chat.text.trim();
+  void _onSendButtonPressed() {
+    final prompt = _promptController.text.trim();
     if (prompt.isNotEmpty) {
-      context.read<HomeBloc>().add(SendButtonPressedHomeEvent(prompt: prompt));
-      _chat.clear();
+      widget.homeBloc.add(SendButtonPressedHomeEvent(prompt: prompt));
+      _promptController.clear();
     } else {
       HelperFunctions.showSnackBar(
         context: context,
         snackBarType: SnackBarType.warning,
         message: AppTextStrings.onEmptyField,
       );
+      return;
     }
+  }
+
+  void _onSpeechButtonPressed() {
+    widget.homeBloc.add(const SpeechButtonPressedHomeEvent());
   }
 }

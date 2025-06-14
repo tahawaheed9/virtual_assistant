@@ -19,6 +19,7 @@ class AppSizes {
 
   // ConstrainedBox Sizes...
   static const double kMaxWidth = 400.0;
+  static const double kMinSizeSpeechButton = 50.0;
 
   // Container Sizes...
   static const double kFeatureBoxRadius = 15.0;
@@ -36,4 +37,8 @@ class AppSizes {
 
   // Response Image Radius...
   static const double kResponseImageRadius = 20.0;
+
+  // BottomNavigationWidget Safe Area Paddings...
+  static const double kVertical = 5.0;
+  static const double kHorizontal = 8.0;
 }

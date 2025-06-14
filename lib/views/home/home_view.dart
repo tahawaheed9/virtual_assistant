@@ -25,6 +25,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView>
     with AutomaticKeepAliveClientMixin {
   late final GlobalKey<ScaffoldState> _scaffoldKey;
+
   bool _hasInitialized = false;
   String? _lastResponse;
 
@@ -79,8 +80,8 @@ class _HomeViewState extends State<HomeView>
         backgroundColor: Theme.of(context).colorScheme.surface,
         bottomNavigationBar: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
-            if (state is !LoadingHomeState) {
-              return const BottomNavigationWidget();
+            if (state is! LoadingHomeState) {
+              return BottomNavigationWidget(homeBloc: context.read<HomeBloc>());
             }
             return const SizedBox.shrink();
           },
@@ -93,6 +94,7 @@ class _HomeViewState extends State<HomeView>
                 snackBarType: SnackBarType.general,
                 message: AppTextStrings.onListening,
               );
+              return;
             }
             if (state is ErrorHomeState) {
               HelperFunctions.showSnackBar(
@@ -100,6 +102,7 @@ class _HomeViewState extends State<HomeView>
                 snackBarType: SnackBarType.error,
                 message: state.error,
               );
+              return;
             }
           },
           builder: (context, state) {
