@@ -33,13 +33,11 @@ class AppearanceSettings extends StatelessWidget {
                   ToggleButtonThemeEvent(isDarkTheme: !state.isDarkTheme),
                 );
               },
-              trailing: Switch.adaptive(
-                value: state.isDarkTheme,
-                onChanged: (_) {
-                  context.read<ThemeBloc>().add(
-                    ToggleButtonThemeEvent(isDarkTheme: !state.isDarkTheme),
-                  );
-                },
+              trailing: IgnorePointer(
+                child: Switch.adaptive(
+                  value: state.isDarkTheme,
+                  onChanged: (_) {},
+                ),
               ),
             );
           },
