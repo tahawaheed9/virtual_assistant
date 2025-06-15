@@ -11,7 +11,9 @@ class AppTextStrings {
   // Tooltips...
   static const String menuButtonTooltip = 'Open drawer';
   static const String textFieldHint = 'Type your prompt...';
-  static const String sendButtonText = 'Send';
+  static const String sendButtonTooltip = 'Send';
+  static const String speakButtonTooltip = 'Tap to speak';
+  static const String stopButtonTooltip = 'Stop';
 
   // SnackBar Messages...
   static const String onListening = 'Listening...';

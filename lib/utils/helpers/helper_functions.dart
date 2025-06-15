@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:virtual_assistant/views/home/bloc/home_state.dart';
 import 'package:virtual_assistant/model/snack_bar/snack_bar_type.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
 import 'package:virtual_assistant/model/icon_button/icon_button_type.dart';
@@ -42,12 +41,12 @@ class HelperFunctions {
 
   // Speech & Send Icon Buttons...
   static IconButton buildIconButton({
-    required HomeState? homeState,
     required BuildContext context,
     required Function() onPressed,
     required IconButtonType iconButtonType,
   }) {
     return IconButton.filled(
+      tooltip: iconButtonType.toolTip,
       style: IconButton.styleFrom(
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
@@ -57,10 +56,7 @@ class HelperFunctions {
       ),
       onPressed: onPressed,
       icon: Icon(
-        iconButtonType == IconButtonType.speech &&
-                homeState is ListeningHomeState
-            ? Icons.stop_circle_outlined
-            : iconButtonType.icon,
+        iconButtonType.icon,
         color: Theme.of(context).colorScheme.onPrimaryContainer,
       ),
     );

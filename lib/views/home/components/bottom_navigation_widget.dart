@@ -93,16 +93,17 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
 
             _textFieldHasText
                 ? HelperFunctions.buildIconButton(
-                  homeState: null,
                   context: context,
                   onPressed: _onSendButtonPressed,
                   iconButtonType: IconButtonType.send,
                 )
                 : HelperFunctions.buildIconButton(
-                  homeState: widget.homeState,
                   context: context,
                   onPressed: _onSpeechButtonPressed,
-                  iconButtonType: IconButtonType.speech,
+                  iconButtonType:
+                      widget.homeState is ListeningHomeState
+                          ? IconButtonType.stop
+                          : IconButtonType.speech,
                 ),
           ],
         ),
