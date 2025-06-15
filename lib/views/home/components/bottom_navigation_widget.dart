@@ -6,6 +6,7 @@ import 'package:virtual_assistant/views/home/bloc/home_state.dart';
 import 'package:virtual_assistant/model/snack_bar/snack_bar_type.dart';
 import 'package:virtual_assistant/utils/helpers/helper_functions.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
+import 'package:virtual_assistant/model/icon_button/icon_button_type.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
@@ -25,14 +26,18 @@ class BottomNavigationWidget extends StatefulWidget {
 class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   late final TextEditingController _promptController;
 
+  bool _textFieldHasText = false;
+
   @override
   void initState() {
     super.initState();
     _promptController = TextEditingController();
+    _promptController.addListener(_onTextChanged);
   }
 
   @override
   void dispose() {
+    _promptController.removeListener(_onTextChanged);
     _promptController.dispose();
     super.dispose();
   }
@@ -71,9 +76,8 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
               child: TextFormField(
                 controller: _promptController,
                 maxLines: null,
-                enabled: widget.homeState.isChatEnabled,
                 keyboardType: TextInputType.multiline,
-                onFieldSubmitted: (_) => _onSendButtonPressed(),
+                enabled: widget.homeState.isChatEnabled,
                 decoration: InputDecoration(
                   hintText: AppTextStrings.textFieldHint,
                   focusedBorder: textFieldBorder,
@@ -82,42 +86,34 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                     Icons.chat_outlined,
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
-                  suffixIcon: GestureDetector(
-                    onTap: _onSendButtonPressed,
-                    child: Tooltip(
-                      message: AppTextStrings.sendButtonText,
-                      child: Icon(
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                        Icons.send_outlined,
-                      ),
-                    ),
-                  ),
                 ),
               ),
             ),
             const SizedBox(width: AppSizes.kSnackBarSpaceBetweenItems),
 
-            // Speech Button...
-            IconButton.filled(
-              style: IconButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-              ),
-              constraints: const BoxConstraints(
-                minWidth: AppSizes.kMinSizeSpeechButton,
-                minHeight: AppSizes.kMinSizeSpeechButton,
-              ),
-              onPressed: _onSpeechButtonPressed,
-              icon: Icon(
-                widget.homeState is ListeningHomeState
-                    ? Icons.stop_circle_outlined
-                    : Icons.mic_outlined,
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
-            ),
+            _textFieldHasText
+                ? HelperFunctions.buildIconButton(
+                  homeState: null,
+                  context: context,
+                  onPressed: _onSendButtonPressed,
+                  iconButtonType: IconButtonType.send,
+                )
+                : HelperFunctions.buildIconButton(
+                  homeState: widget.homeState,
+                  context: context,
+                  onPressed: _onSpeechButtonPressed,
+                  iconButtonType: IconButtonType.speech,
+                ),
           ],
         ),
       ),
     );
+  }
+
+  void _onTextChanged() {
+    setState(() {
+      _textFieldHasText = _promptController.text.trim().isNotEmpty;
+    });
   }
 
   void _onSendButtonPressed() {

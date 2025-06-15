@@ -109,7 +109,7 @@ class _HomeViewState extends State<HomeView>
         builder: (context, state) {
           if (state is LoadingHomeState) {
             ScaffoldMessenger.of(context).clearSnackBars();
-            return HelperFunctions.showLoadingScreen(context);
+            return HelperFunctions.showGeneratingResponseScreen(context);
           }
           if (state is LoadedHomeState) {
             _lastResponse = state.response;
