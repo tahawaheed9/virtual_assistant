@@ -1,9 +1,6 @@
 class AppTextStrings {
   AppTextStrings._();
 
-  // PageStorage keys...
-  static const String homeViewKey = 'home_view_key';
-
   // App & Appbar Titles...
   static const String appTitle = 'Virtual Assistant';
 

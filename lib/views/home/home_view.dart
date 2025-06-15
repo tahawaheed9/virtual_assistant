@@ -55,75 +55,75 @@ class _HomeViewState extends State<HomeView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return KeyedSubtree(
-      key: const PageStorageKey(AppTextStrings.homeViewKey),
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: CustomAppBar(
-          leading: IconButton(
-            tooltip: AppTextStrings.menuButtonTooltip,
-            onPressed: () {
-              if (_scaffoldKey.currentState != null) {
-                _scaffoldKey.currentState!.openDrawer();
-              }
-            },
-            icon: Icon(
-              Icons.menu_outlined,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: CustomAppBar(
+        leading: IconButton(
+          tooltip: AppTextStrings.menuButtonTooltip,
+          onPressed: () {
+            if (_scaffoldKey.currentState != null) {
+              _scaffoldKey.currentState!.openDrawer();
+            }
+          },
+          icon: Icon(
+            Icons.menu_outlined,
+            color: Theme.of(context).colorScheme.primary,
           ),
-          title: BounceIn(child: const Text(AppTextStrings.appTitle)),
         ),
-        drawer: const AppDrawer(),
-        resizeToAvoidBottomInset: true,
-        drawerEnableOpenDragGesture: false,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        bottomNavigationBar: BlocBuilder<HomeBloc, HomeState>(
-          builder: (context, state) {
-            if (state is! LoadingHomeState) {
-              return BottomNavigationWidget(homeBloc: context.read<HomeBloc>());
+        title: BounceIn(child: const Text(AppTextStrings.appTitle)),
+      ),
+      drawer: const AppDrawer(),
+      resizeToAvoidBottomInset: true,
+      drawerEnableOpenDragGesture: false,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      bottomNavigationBar: BlocBuilder<HomeBloc, HomeState>(
+        builder: (context, state) {
+          if (state is! LoadingHomeState) {
+            return BottomNavigationWidget(
+              homeBloc: context.read<HomeBloc>(),
+              homeState: state,
+            );
+          }
+          return const SizedBox.shrink();
+        },
+      ),
+      body: BlocConsumer<HomeBloc, HomeState>(
+        listener: (context, state) {
+          if (state is ListeningHomeState) {
+            HelperFunctions.showSnackBar(
+              context: context,
+              snackBarType: SnackBarType.general,
+              message: AppTextStrings.onListening,
+            );
+            return;
+          }
+          if (state is ErrorHomeState) {
+            HelperFunctions.showSnackBar(
+              context: context,
+              snackBarType: SnackBarType.error,
+              message: state.error,
+            );
+            return;
+          }
+        },
+        builder: (context, state) {
+          if (state is LoadingHomeState) {
+            ScaffoldMessenger.of(context).clearSnackBars();
+            return HelperFunctions.showLoadingScreen(context);
+          }
+          if (state is LoadedHomeState) {
+            _lastResponse = state.response;
+            return ContentWidget(response: state.response);
+          }
+          if (state is ListeningHomeState) {
+            if (_lastResponse != null) {
+              return ContentWidget(response: _lastResponse!);
+            } else {
+              return const InitialHome();
             }
-            return const SizedBox.shrink();
-          },
-        ),
-        body: BlocConsumer<HomeBloc, HomeState>(
-          listener: (context, state) {
-            if (state is ListeningHomeState) {
-              HelperFunctions.showSnackBar(
-                context: context,
-                snackBarType: SnackBarType.general,
-                message: AppTextStrings.onListening,
-              );
-              return;
-            }
-            if (state is ErrorHomeState) {
-              HelperFunctions.showSnackBar(
-                context: context,
-                snackBarType: SnackBarType.error,
-                message: state.error,
-              );
-              return;
-            }
-          },
-          builder: (context, state) {
-            if (state is LoadingHomeState) {
-              ScaffoldMessenger.of(context).clearSnackBars();
-              return HelperFunctions.showLoadingScreen(context);
-            }
-            if (state is LoadedHomeState) {
-              _lastResponse = state.response;
-              return ContentWidget(response: state.response);
-            }
-            if (state is ListeningHomeState) {
-              if (_lastResponse != null) {
-                return ContentWidget(response: _lastResponse!);
-              } else {
-                return const InitialHome();
-              }
-            }
-            return const InitialHome();
-          },
-        ),
+          }
+          return const InitialHome();
+        },
       ),
     );
   }

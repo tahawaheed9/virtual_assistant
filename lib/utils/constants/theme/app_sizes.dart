@@ -17,8 +17,13 @@ class AppSizes {
   static const double kFeatureTextFontSize = 20.0;
   static const double kFeatureBoxTitleFontSize = 18.0;
 
+  // TextField Configs...
+  static const double kTextFieldBorderWidth = 2.0;
+  static const double kTextFieldRadius = 15.0;
+
   // ConstrainedBox Sizes...
   static const double kMaxWidth = 400.0;
+  static const double kMaxHeight = 200.0;
   static const double kMinSizeSpeechButton = 50.0;
 
   // Container Sizes...
