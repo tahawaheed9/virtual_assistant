@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:virtual_assistant/model/snack_bar/snack_bar_type.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
-import 'package:virtual_assistant/model/icon_button/icon_button_type.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
 
 class HelperFunctions {
@@ -35,29 +34,6 @@ class HelperFunctions {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  // Speech & Send Icon Buttons...
-  static IconButton buildIconButton({
-    required BuildContext context,
-    required Function() onPressed,
-    required IconButtonType iconButtonType,
-  }) {
-    return IconButton.filled(
-      tooltip: iconButtonType.toolTip,
-      style: IconButton.styleFrom(
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-      ),
-      constraints: const BoxConstraints(
-        minWidth: AppSizes.kMinSizeSpeechButton,
-        minHeight: AppSizes.kMinSizeSpeechButton,
-      ),
-      onPressed: onPressed,
-      icon: Icon(
-        iconButtonType.icon,
-        color: Theme.of(context).colorScheme.onPrimaryContainer,
       ),
     );
   }

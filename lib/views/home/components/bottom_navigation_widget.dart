@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:virtual_assistant/views/home/bloc/home_bloc.dart';
 import 'package:virtual_assistant/views/home/bloc/home_event.dart';
 import 'package:virtual_assistant/views/home/bloc/home_state.dart';
-import 'package:virtual_assistant/model/snack_bar/snack_bar_type.dart';
-import 'package:virtual_assistant/utils/helpers/helper_functions.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
 import 'package:virtual_assistant/model/icon_button/icon_button_type.dart';
+import 'package:virtual_assistant/views/components/custom_icon_button.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
@@ -26,12 +25,13 @@ class BottomNavigationWidget extends StatefulWidget {
 class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   late final TextEditingController _promptController;
 
-  bool _textFieldHasText = false;
+  late final ValueNotifier<bool> _textFieldHasData;
 
   @override
   void initState() {
     super.initState();
     _promptController = TextEditingController();
+    _textFieldHasData = ValueNotifier(false);
     _promptController.addListener(_onTextChanged);
   }
 
@@ -39,6 +39,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   void dispose() {
     _promptController.removeListener(_onTextChanged);
     _promptController.dispose();
+    _textFieldHasData.dispose();
     super.dispose();
   }
 
@@ -91,20 +92,23 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
             ),
             const SizedBox(width: AppSizes.kSnackBarSpaceBetweenItems),
 
-            _textFieldHasText
-                ? HelperFunctions.buildIconButton(
-                  context: context,
-                  onPressed: _onSendButtonPressed,
-                  iconButtonType: IconButtonType.send,
-                )
-                : HelperFunctions.buildIconButton(
-                  context: context,
-                  onPressed: _onSpeechButtonPressed,
+            ValueListenableBuilder(
+              valueListenable: _textFieldHasData,
+              builder: (context, textFieldHasData, child) {
+                return CustomIconButton(
+                  onPressed:
+                      textFieldHasData
+                          ? _onSendButtonPressed
+                          : _onSpeechButtonPressed,
                   iconButtonType:
-                      widget.homeState is ListeningHomeState
+                      textFieldHasData
+                          ? IconButtonType.send
+                          : widget.homeState is ListeningHomeState
                           ? IconButtonType.stop
                           : IconButtonType.speech,
-                ),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -112,24 +116,13 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   }
 
   void _onTextChanged() {
-    setState(() {
-      _textFieldHasText = _promptController.text.trim().isNotEmpty;
-    });
+    _textFieldHasData.value = _promptController.text.trim().isNotEmpty;
   }
 
   void _onSendButtonPressed() {
     final prompt = _promptController.text.trim();
-    if (prompt.isNotEmpty) {
-      widget.homeBloc.add(SendButtonPressedHomeEvent(prompt: prompt));
-      _promptController.clear();
-    } else {
-      HelperFunctions.showSnackBar(
-        context: context,
-        snackBarType: SnackBarType.warning,
-        message: AppTextStrings.onEmptyField,
-      );
-      return;
-    }
+    widget.homeBloc.add(SendButtonPressedHomeEvent(prompt: prompt));
+    _promptController.clear();
   }
 
   void _onSpeechButtonPressed() {

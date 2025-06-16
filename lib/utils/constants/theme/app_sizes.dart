@@ -24,7 +24,7 @@ class AppSizes {
   // ConstrainedBox Sizes...
   static const double kMaxWidth = 400.0;
   static const double kMaxHeight = 200.0;
-  static const double kMinSizeSpeechButton = 50.0;
+  static const double kMinSizeIconButton = 50.0;
 
   // Container Sizes...
   static const double kFeatureBoxRadius = 15.0;
@@ -35,7 +35,7 @@ class AppSizes {
   static const double kSpaceBetweenItems = 10.0;
   static const double kSpaceBetweenSections = 30.0;
 
-  // Snackbar Sizes...
+  // SnackBar Sizes...
   static const double kSnackBarBorderRadius = 5.0;
   static const double kSnackBarContentPadding = 16.0;
   static const double kSnackBarSpaceBetweenItems = 10.0;
