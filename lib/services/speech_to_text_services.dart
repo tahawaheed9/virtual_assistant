@@ -5,10 +5,11 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 
 class SpeechToTextServices {
   final SpeechToText _speechToText = SpeechToText();
+  String _recognizedWords = '';
 
   // Init Speech To Text...
   Future<bool> initSpeechToText() async {
-    final isSpeechEnabled = await _speechToText.initialize(
+    final bool isSpeechEnabled = await _speechToText.initialize(
       onStatus: (status) => debugPrint('Status: $status'),
       onError: (error) => debugPrint('Error: $error'),
     );
@@ -17,9 +18,10 @@ class SpeechToTextServices {
 
   // Start Listening to the User...
   Future<void> startListening() async {
+    _recognizedWords = '';
     await _speechToText.listen(
       localeId: 'en_US',
-      onResult: getRecognizedSpeech,
+      onResult: _getRecognizedSpeech
     );
   }
 
@@ -28,9 +30,10 @@ class SpeechToTextServices {
     await _speechToText.stop();
   }
 
-  String getRecognizedSpeech(SpeechRecognitionResult result) {
-    final recognizedSpeech = result.recognizedWords;
-    return recognizedSpeech;
+  String _getRecognizedSpeech(SpeechRecognitionResult result) {
+    _recognizedWords = result.recognizedWords;
+    debugPrint(_recognizedWords);
+    return _recognizedWords;
   }
 
   /// Getting the instance of [isListening]...
@@ -41,4 +44,7 @@ class SpeechToTextServices {
 
   /// Getting the instance of [hasPermission]...
   Future<bool> get hasPermission async => await _speechToText.hasPermission;
+
+  /// Getting the last recognized words...
+  String get getRecognizedWords => _recognizedWords;
 }

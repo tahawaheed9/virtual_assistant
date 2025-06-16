@@ -11,8 +11,8 @@ class InitialHomeState extends HomeState {
   const InitialHomeState();
 }
 
-class LoadingHomeState extends HomeState {
-  const LoadingHomeState();
+class GeneratingResponseHomeState extends HomeState {
+  const GeneratingResponseHomeState();
 }
 
 class ListeningHomeState extends HomeState {

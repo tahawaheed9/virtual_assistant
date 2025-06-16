@@ -20,8 +20,11 @@ class AppTextStrings {
   static const String onSpeechError = 'Could not load Speech.';
   static const String onUnableToLaunchURL = 'Unable to launch the url';
   static const String onNullResponse = 'Could not fetch the response.';
+  static const String onSpeechNotRecognized =
+      'No speech recognized. Please try again.';
 
   // Loading Screen Message...
+  static const String onAnalyzingSpeech = 'Analyzing Speech...';
   static const String onGeneratingResponse = 'Generating Response...';
 
   /* ------------ Home Page Text ------------ */

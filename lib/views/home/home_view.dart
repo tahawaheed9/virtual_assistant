@@ -9,6 +9,7 @@ import 'package:virtual_assistant/views/home/bloc/home_state.dart';
 import 'package:virtual_assistant/model/snack_bar/snack_bar_type.dart';
 import 'package:virtual_assistant/utils/helpers/helper_functions.dart';
 import 'package:virtual_assistant/views/components/custom_app_bar.dart';
+import 'package:virtual_assistant/views/components/loading_screen.dart';
 import 'package:virtual_assistant/views/home/components/app_drawer.dart';
 import 'package:virtual_assistant/views/home/components/initial_home.dart';
 import 'package:virtual_assistant/views/home/components/content_widget.dart';
@@ -78,7 +79,7 @@ class _HomeViewState extends State<HomeView>
       backgroundColor: Theme.of(context).colorScheme.surface,
       bottomNavigationBar: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
-          if (state is! LoadingHomeState) {
+          if (state is! GeneratingResponseHomeState) {
             return BottomNavigationWidget(
               homeBloc: context.read<HomeBloc>(),
               homeState: state,
@@ -107,19 +108,19 @@ class _HomeViewState extends State<HomeView>
           }
         },
         builder: (context, state) {
-          if (state is LoadingHomeState) {
+          if (state is GeneratingResponseHomeState) {
             ScaffoldMessenger.of(context).clearSnackBars();
-            return HelperFunctions.showGeneratingResponseScreen(context);
+            return const LoadingScreen(
+              text: AppTextStrings.onGeneratingResponse,
+            );
           }
           if (state is LoadedHomeState) {
             _lastResponse = state.response;
             return ContentWidget(response: state.response);
           }
-          if (state is ListeningHomeState) {
+          if (state is ListeningHomeState || state is ErrorHomeState) {
             if (_lastResponse != null) {
               return ContentWidget(response: _lastResponse!);
-            } else {
-              return const InitialHome();
             }
           }
           return const InitialHome();
