@@ -61,56 +61,55 @@ class _FeatureBoxState extends State<FeatureBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        vertical: AppSizes.kPadding10,
-        horizontal: AppSizes.kPadding35,
-      ),
-      padding: const EdgeInsets.all(AppSizes.kPadding20),
-      decoration: BoxDecoration(
-        color: widget.color,
-        borderRadius: BorderRadius.circular(AppSizes.kFeatureBoxRadius),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  widget.featureTitle,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: AppSizes.kFeatureBoxTitleFontSize,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _isExpanded = !_isExpanded;
+        });
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(
+          vertical: AppSizes.kPadding10,
+          horizontal: AppSizes.kPadding35,
+        ),
+        padding: const EdgeInsets.all(AppSizes.kPadding20),
+        decoration: BoxDecoration(
+          color: widget.color,
+          borderRadius: BorderRadius.circular(AppSizes.kFeatureBoxRadius),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    widget.featureTitle,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: AppSizes.kFeatureBoxTitleFontSize,
+                    ),
                   ),
-                ),
-                const SizedBox(height: AppSizes.kSizedBoxHeight3),
-                Text(
-                  widget.featureDescription,
-                  key: _textKey,
-                  maxLines: _isExpanded ? null : 2,
-                  overflow:
-                      _isExpanded
-                          ? TextOverflow.visible
-                          : TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-          if (_isOverflowing)
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  _isExpanded = !_isExpanded;
-                });
-              },
-              tooltip: _isExpanded ? 'Collapse' : 'Expand',
-              icon: Icon(
-                _isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                  const SizedBox(height: AppSizes.kSizedBoxHeight3),
+                  Text(
+                    widget.featureDescription,
+                    key: _textKey,
+                    maxLines: _isExpanded ? null : 2,
+                    overflow:
+                        _isExpanded
+                            ? TextOverflow.visible
+                            : TextOverflow.ellipsis,
+                  ),
+                ],
               ),
             ),
-        ],
+            if (_isOverflowing)
+              Icon(
+                _isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+              ),
+          ],
+        ),
       ),
     );
   }
