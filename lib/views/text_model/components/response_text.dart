@@ -18,7 +18,9 @@ class ResponseBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: AppSizes.kMaxWidth),
-      child: Column(
+      child: ListView(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         children: <Widget>[
           GptMarkdown(
             generatedContent,
@@ -33,13 +35,14 @@ class ResponseBox extends StatelessWidget {
                     snackBarType: SnackBarType.error,
                     message: AppTextStrings.onUnableToLaunchURL,
                   );
+                  return;
                 }
               }
             },
           ),
-          const SizedBox(height: 10.0),
+          const SizedBox(height: AppSizes.kSpaceBetweenItems),
           const CustomAppDivider(),
-          const SizedBox(height: 10.0),
+          const SizedBox(height: AppSizes.kSpaceBetweenItems),
           const Text(AppTextStrings.disclaimer),
         ],
       ),

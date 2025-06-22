@@ -21,6 +21,7 @@ class SpeechToTextServices {
     _recognizedWords = '';
     await _speechToText.listen(
       localeId: 'en_US',
+      listenFor: const Duration(seconds: 60),
       onResult: _getRecognizedSpeech
     );
   }

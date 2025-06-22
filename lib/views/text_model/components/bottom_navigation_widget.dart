@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
-import 'package:virtual_assistant/views/home/bloc/home_bloc.dart';
-import 'package:virtual_assistant/views/home/bloc/home_event.dart';
-import 'package:virtual_assistant/views/home/bloc/home_state.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_sizes.dart';
 import 'package:virtual_assistant/model/icon_button/icon_button_type.dart';
 import 'package:virtual_assistant/views/components/custom_icon_button.dart';
+import 'package:virtual_assistant/views/text_model/bloc/text_model_bloc.dart';
+import 'package:virtual_assistant/views/text_model/bloc/text_model_event.dart';
+import 'package:virtual_assistant/views/text_model/bloc/text_model_state.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
-  final HomeBloc homeBloc;
-  final HomeState homeState;
+  final TextModelBloc bloc;
+  final TextModelState state;
 
   const BottomNavigationWidget({
     super.key,
-    required this.homeBloc,
-    required this.homeState,
+    required this.bloc,
+    required this.state,
   });
 
   @override
@@ -78,7 +78,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                 controller: _promptController,
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
-                enabled: widget.homeState.isChatEnabled,
+                enabled: widget.state.isChatEnabled,
                 decoration: InputDecoration(
                   hintText: AppTextStrings.textFieldHint,
                   focusedBorder: textFieldBorder,
@@ -103,7 +103,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                   iconButtonType:
                       textFieldHasData
                           ? IconButtonType.send
-                          : widget.homeState is ListeningHomeState
+                          : widget.state is ListeningTextModelState
                           ? IconButtonType.stop
                           : IconButtonType.speech,
                 );
@@ -121,11 +121,11 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
 
   void _onSendButtonPressed() {
     final prompt = _promptController.text.trim();
-    widget.homeBloc.add(SendButtonPressedHomeEvent(prompt: prompt));
+    widget.bloc.add(SendButtonPressedTextModelEvent(prompt: prompt));
     _promptController.clear();
   }
 
   void _onSpeechButtonPressed() {
-    widget.homeBloc.add(const SpeechButtonPressedHomeEvent());
+    widget.bloc.add(const SpeechButtonPressedTextModelEvent());
   }
 }

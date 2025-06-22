@@ -2,33 +2,33 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:virtual_assistant/services/ai_services.dart';
-import 'package:virtual_assistant/views/home/bloc/home_event.dart';
-import 'package:virtual_assistant/views/home/bloc/home_state.dart';
 import 'package:virtual_assistant/services/speech_to_text_services.dart';
+import 'package:virtual_assistant/views/text_model/bloc/text_model_event.dart';
+import 'package:virtual_assistant/views/text_model/bloc/text_model_state.dart';
 import 'package:virtual_assistant/utils/constants/theme/app_text_strings.dart';
 
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
+class TextModelBloc extends Bloc<TextModelEvent, TextModelState> {
   final SpeechToTextServices _speechToTextServices = SpeechToTextServices();
   final AIServices _aiServices = AIServices();
 
-  HomeBloc() : super(const InitialHomeState()) {
+  TextModelBloc() : super(const InitialTextModelState()) {
     // Initially when the app starts...
-    on<InitialHomeEvent>((event, emit) async {
+    on<InitialTextModelEvent>((event, emit) async {
       final isSpeechEnabled = await _speechToTextServices.initSpeechToText();
       if (isSpeechEnabled) {
-        emit(const InitialHomeState());
+        emit(const InitialTextModelState());
       } else {
-        emit(const ErrorHomeState(error: AppTextStrings.onSpeechError));
+        emit(const ErrorTextModelState(error: AppTextStrings.onSpeechError));
         return;
       }
     });
 
     // Triggers when speech button is pressed...
-    on<SpeechButtonPressedHomeEvent>((event, emit) async {
+    on<SpeechButtonPressedTextModelEvent>((event, emit) async {
       // If speech to text has permission and is not listening...
       if (await _speechToTextServices.hasPermission &&
           _speechToTextServices.isNotListening) {
-        emit(const ListeningHomeState());
+        emit(const ListeningTextModelState());
 
         await _speechToTextServices.startListening();
       }
@@ -43,22 +43,24 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         debugPrint('Bloc: $recognizedWords');
         if (recognizedWords.isEmpty) {
           emit(
-            const ErrorHomeState(error: AppTextStrings.onSpeechNotRecognized),
+            const ErrorTextModelState(
+              error: AppTextStrings.onSpeechNotRecognized,
+            ),
           );
           return;
         }
 
         // Show loading screen while fetching the response...
-        emit(const GeneratingResponseHomeState());
+        emit(const GeneratingResponseTextModelState());
 
         // Response fetched...
         final response = await _aiServices.getAIModelResponse(recognizedWords);
 
         // Load the response...
         if (response.isNotEmpty) {
-          emit(LoadedHomeState(response: response));
+          emit(LoadedTextModelState(response: response));
         } else {
-          emit(const ErrorHomeState(error: AppTextStrings.onNullResponse));
+          emit(const ErrorTextModelState(error: AppTextStrings.onNullResponse));
           return;
         }
       } else {
@@ -67,13 +69,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
 
     // Triggers when the send button is pressed...
-    on<SendButtonPressedHomeEvent>((event, emit) async {
-      emit(const GeneratingResponseHomeState());
+    on<SendButtonPressedTextModelEvent>((event, emit) async {
+      emit(const GeneratingResponseTextModelState());
       final response = await _aiServices.getAIModelResponse(event.prompt);
       if (response.isNotEmpty) {
-        emit(LoadedHomeState(response: response));
+        emit(LoadedTextModelState(response: response));
       } else {
-        emit(const ErrorHomeState(error: AppTextStrings.onNullResponse));
+        emit(const ErrorTextModelState(error: AppTextStrings.onNullResponse));
       }
     });
   }
