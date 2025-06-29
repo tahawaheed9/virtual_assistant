@@ -68,13 +68,5 @@ The primary goal of this project is to create a user-centric mobile solution tha
   </picture>
 </div>
 
-- ### App Listening State
-<div>
-  <picture>
-    <source srcset="screenshots/app_listening_state.png" media="(max-width: 400px)">
-    <img src="screenshots/app_listening_state.png" width="300" alt="app_listening_state">
-  </picture>
-</div>
-
 ## 🙏 Credits
 - 🖼️ App Icon from [Stockio](https://www.stockio.com/free-icon/microphone-filo-icon).
