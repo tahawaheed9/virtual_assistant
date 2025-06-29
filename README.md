@@ -13,7 +13,7 @@ The primary goal of this project is to create a user-centric mobile solution tha
 - Offer a clean, user-friendly interface with customizable themes.
 - Ensure maintainability and scalability through proper state management using the BLoC architecture.
 
-## 💻 Technologies Used
+## 💻 Technologies
 
 - **Flutter** – Cross-platform UI toolkit for building natively compiled mobile applications.
 - **Dart** – Primary programming language for Flutter development.
