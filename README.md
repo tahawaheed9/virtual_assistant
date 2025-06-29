@@ -32,9 +32,6 @@ The primary goal of this project is to create a user-centric mobile solution tha
 - 🌍 Multilingual Input: Handles voice inputs in multiple languages effectively.
 - 📱 Responsive UI: Works seamlessly across different screen sizes and platforms.
 
-## 🙏 Credits
-- 🖼️ App Icon from [Stockio](https://www.stockio.com/free-icon/microphone-filo-icon).
-
 ## 🖼️ Screenshots
 
 - ### Splash Screen
@@ -78,3 +75,6 @@ The primary goal of this project is to create a user-centric mobile solution tha
     <img src="screenshots/app_listening_state.png" width="300" alt="app_listening_state">
   </picture>
 </div>
+
+## 🙏 Credits
+- 🖼️ App Icon from [Stockio](https://www.stockio.com/free-icon/microphone-filo-icon).
